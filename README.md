@@ -9,8 +9,9 @@ Abdullahi et al., "GenPath-PPH: Integrating Gene Expression and Pathway Networks
 - [Datasets](#datasets)
 - [GenPath-PPH Analysis](#GenPath-PPH-Analysis)
 - [Permutation Test](#permutation-test)
-- [Pathway Enrichment Analysis](#pathway_enrichment-analysis)
 - [License](#license)
+- [Installation](#installation)
+
 
 ## Introduction
 
