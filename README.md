@@ -40,14 +40,12 @@ The core methodology consists of the following steps to identify pathways that a
 - **Condition Grouping**: The dataset is then divided into different condition groups (e.g., **HCC vs Control**) based on sample conditions. This allows the analysis of how gene expression changes between the two conditions and impacts the pathway structure.
 
 ### 2. **Persistent Path Homology (PPH) Calculation**
-   For each pathway and each condition (i.e., HCC and Control), PPH is computed to track the topological changes in the gene expression network:
+   For each pathway and each condition (i.e., HCC and Control), PPH is computed to track the topological changes in the gene expression network using
    
    - **Filtration Scale**: From 0 to 1, where 0 represents the highest correlation between genes and 1 represents the weakest correlation.
    - **Step Size**: A step size of 0.01 results in 101 Betti numbers for each pathway and each condition across the filtration scale [0,1].
 
-The core output of the PPH computation is a series of Betti numbers, which describe the topological features of the pathway at different filtration values (gene correlation strength).
-
-The output consists of two sets of Betti numbers per pathway—one for **HCC** and one for **Control**—enabling a comparative analysis of pathway network alterations between the two conditions.
+The core output of the PPH computation is a series of Betti numbers, which describe the topological features of the pathway at different filtration values (gene correlation strength). The output consists of two sets of Betti numbers per pathway—one for **HCC** and one for **Control**—enabling a comparative analysis of pathway network alterations between the two conditions.
 
 ### 3. **Statistical Significance**
 
