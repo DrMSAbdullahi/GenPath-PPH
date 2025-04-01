@@ -1,8 +1,55 @@
 # GenPath-PPH: Integrating Gene Expression and Pathway Networks via Persistent Path Homology Enhances Detection of Disease-Relevant Pathways
 
-This project contains the code and methodology described in the manuscript **GenPath-PPH**, which introduces a novel approach for detecting disease-relevant pathways by integrating gene expression data with biological pathway networks using persistent path homology (PPH). The approach enhances the ability to detect pathways that are significantly altered in disease conditions.
+This is a supplementary material for codes used in the paper:
+Abdullahi et al., "GenPath-PPH: Integrating Gene Expression and Pathway Networks via Persistent Path Homology Enhances Detection of Disease-Relevant Pathways", submitted to Journal of Applied and Computational Topology.
 
-The core methodology combines network-based analysis, persistence homology, and gene expression data to identify pathways most likely to be implicated in diseases.
+## Methodology
+The core methodology consists of the following steps to identify pathways that are most likely to be implicated in diseases.
+
+### 1. **Pathway-Specific Gene Expression Datasets**
+   The first step involves extracting gene expression data specific to each biological pathway. This is done by identifying the genes involved in each pathway, and then creating pathway-specific datasets based on their expression profiles.
+
+### 2. **Condition Grouping**
+   The dataset is then divided into different condition groups (e.g., **HCC vs Control**) based on sample conditions. This allows the analysis of how gene expression changes between the two conditions and impacts the pathway structure.
+
+### 3. **Persistent Path Homology (PPH) Calculation**
+   For each pathway and each condition (i.e., HCC and Control), PPH is computed to evaluate the topological changes in the gene expression network. Persistent path homology is calculated for a series of filtrations on a scale from 0 to 1, with a step size of 0.01, resulting in **101 values** for each pathway.
+
+### 4. **Betti Number Computation**
+   The core output of the PPH analysis is a series of Betti numbers, which describe the topological features of the pathway at different filtration values. These Betti numbers correspond to the features of the pathway network, with values reflecting the persistence of specific structures (e.g., loops, voids) across different levels of gene correlation.
+
+   - **Filtration Scale**: From 0 to 1, where 0 represents the highest correlation between genes and 1 represents the weakest correlation.
+   - **Step Size**: A step size of 0.01 results in 101 Betti numbers for each pathway across the filtration scale [0,1].
+
+The output consists of two sets of Betti numbers per pathway—one for **HCC** and one for **Control**—enabling a comparative analysis of pathway network alterations between the two conditions.
+
+## Key Features
+
+- Integrating pathway specific gene expression data with its corresponding biological network to modulate its activity and identify the most disease-relevant pathways by considering the biological connectivity of genes.
+- Detecting pathways that remain significantly altered across multiple disease states or conditions.
+- Providing Betti numbers over a filtration scale to assess the topological features of pathways at various correlation levels.
+
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Datasets](#datasets)
+- [Topological Data Analysis](#topological-data-analysis)
+- [Permutation Test](#permutation-test)
+- [Pathway Enrichment Analysis](#pathway_enrichment-analysis)
+- [License](#license)
+
+## Introduction
+
+This project contains the code and methodology described in the manuscript **GenPath-PPH**, which introduces a novel approach for detecting disease-relevant pathways by integrating gene expression data with biological pathway networks using persistent path homology (PPH). The approach enhances the ability to detect pathways that are significantly altered in disease conditions (hepatocellular carcinoma (HCC)) from peripheral blood mononuclear cell (PBMC) samples.
+
+## Datasets
+
+We used the following datasets in our project. 
+
+- **RNA-Seq Gene Expression Dataset**: This dataset comprises 26,575 gene expressions from 34 samples, with 17 representing healthy samples and 17 representing disease samples. The original dataset was sourced from the study by Han et al.[1], titled 'RNA-seq profiling reveals PBMC RNA as a potential biomarker for hepatocellular carcinoma.' To access the original sequencing data, please refer to NCBI project PRJNA739257 [here](https://dataview.ncbi.nlm.nih.gov/object/PRJNA739257).
+This project 
+
+
 
 ## Key Features
 
