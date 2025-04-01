@@ -40,7 +40,7 @@ The core methodology consists of the following steps to identify pathways that a
 - **Condition Grouping**: The dataset is then divided into different condition groups (e.g., **HCC vs Control**) based on sample conditions. This allows the analysis of how gene expression changes between the two conditions and impacts the pathway structure.
 
 ### 2. **Persistent Path Homology (PPH) Calculation**
-   For each pathway and each condition (i.e., HCC and Control), PPH is computed to track the topological changes in the gene expression network using
+   For each pathway and each condition (i.e., HCC and Control), PPH is computed to track the topological changes (in both dimensions 0 and 1) in the gene expression network using
    
    - **Filtration Scale**: From 0 to 1, where 0 represents the highest correlation between genes and 1 represents the weakest correlation.
    - **Step Size**: A step size of 0.01 results in 101 Betti numbers for each pathway and each condition across the filtration scale [0,1].
@@ -50,25 +50,20 @@ The core output of the PPH computation is a series of Betti numbers, which descr
 ### 3. **Statistical Significance**
 
 #### a. **Global Differences**:
-Calculate the difference between the persistence landscapes of disease and control groups and test significance via permutation.
+Calculate the average persistence landscapes for each group (disease and control). Then, compute the difference between them and test for significance using the supremum (sup) and 1/2-norms, via permutation testing.
 
 #### b. **Pathway-Level Differences**:
-Use Kolmogorov-Smirnov (KS) tests and Cohen’s $d$ to compute statistical significance.
-
-## Key Features
-- Integrating pathway specific gene expression data with its corresponding biological network to modulate its activity and identify the most disease-relevant pathways by considering the biological connectivity of genes.
-- Detecting pathways that remain significantly altered across multiple disease states or conditions.
-- Providing Betti numbers over a filtration scale to assess the topological features of pathways at various correlation levels.
+Use Kolmogorov-Smirnov (KS) tests and Cohen’s $d$ to compute statistical significance via permutation testing.
 
 ### Project Dependencies
 
-- **Gudhi Library (Python Version)**: We utilized the 'Gudhi' library [2] (version 3.7.1) for performing computations and visualizations of persistent homology. You can find the Python version of 'Gudhi' at [https://gudhi.inria.fr/](https://gudhi.inria.fr/).
+- **PathHom**: We modify the 'PathHom' [2] code to perform PPH computations and obtain the series of Betti numbers. You can find the original 'PathHom' code at [https://github.com/WeilabMSU/PathHom](https://github.com/WeilabMSU/PathHom).
 
-### Persistent Homology Computation
+### Persistent Path Homology Computation
 
-- **Inter-Sample Dissimilarity Distance Matrix**: The persistent homology computations were based on the inter-sample dissimilarity distance matrix, calculated using the complement of the Pearson correlation coefficient p (i.e., 1 - p).
+- **Dissimilarity Distance Matrix**: The persistent homology computations were based on the inter-gene dissimilarity distance matrix, calculated using  $1 - |\rho|$, where $\rho$ is the Pearson correlation coefficient.
 
-- **VR Complexes Construction**: We adopted the VR complexes construction method to create the simplicial complexes for our sample point clouds.
+- **Path Complexes Construction**: We adopted the VR complexes construction method to create the simplicial complexes for our sample point clouds.
 
 ### Topological Descriptors
 
@@ -76,15 +71,13 @@ Use Kolmogorov-Smirnov (KS) tests and Cohen’s $d$ to compute statistical signi
 
 ### Visualization
 
-- **Persistence Diagrams and Barcodes**: All persistence diagrams and persistence barcodes were plotted using the 'plot_persistence_diagram' and 'plot_persistence_barcode' functions from the 'Gudhi' library in Python.
+- **Persistence Diagrams and Barcodes**: The persistence diagrams and persistence barcodes were plotted using the 'plot_persistence_diagram' and 'plot_persistence_barcode' functions from the 'Gudhi' library in Python.
 
-- **Betti Curves**: We demonstrated the Betti curves using our own defined functions.
-
-- **Permutation Test Plots**: We employed the `seaborn.kdeplot` function from the Seaborn data visualization package for generating KDE (Kernel Density Estimation) plots of our permutation distributions. This allowed us to visualize the density estimators for our permutation distributions.
+- Custom plotting functions were created using the `seaborn` and 'matplotlib.pyplot' and 'mpl_toolkits.mplot3d' libraries to generate additional plots.
 
 ## Permutation Test
 
-A two-tailed statistical permutation test was performed using Python (version 3.10.7) and the Benjamini–Hochberg correction method was adopted for multiple testing using 'statsmodels' package (version 0.13.5). The False Discovery Rate (FDR) threshold was set to less than 0.05 throughout.
+All permutation tests were performed using Python (version 3.12.6) and the Benjamini–Hochberg correction method was applied for multiple testing using 'statsmodels' package (version 0.13.5). The False Discovery Rate (FDR) threshold was set to $< 0.05$ throughout.
 
 ## License
 
