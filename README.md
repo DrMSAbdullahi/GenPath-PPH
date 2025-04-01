@@ -128,7 +128,7 @@ To use this code, you will need Python and several dependencies. You can install
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/GenPath-PPH.git
+git clone https://github.com/DrMSAbdullahi/GenPath-PPH.git
 cd GenPath-PPH
 
 # Install the necessary packages
