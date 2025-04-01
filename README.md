@@ -85,13 +85,13 @@ Use Kolmogorov-Smirnov (KS) tests and Cohen’s $d$ to compute statistical signi
 
 A two-tailed statistical permutation test was performed using Python (version 3.10.7) and the Benjamini–Hochberg correction method was adopted for multiple testing using 'statsmodels' package (version 0.13.5). The False Discovery Rate (FDR) threshold was set to less than 0.05 throughout.
 
-## Gene Differential Expression Analysis
+%## Gene Differential Expression Analysis
 
-Differential expression analysis was performed using the `PyDESeq2' [3] package (version 0.4.4) in Python (version 3.10.7). Only genes with adjusted p-value $< 0.05$ (adjusted using the Benjamini-Hochberg method), and log fold change $\geq 1$ were considered as significantly differentially expressed.
+%Differential expression analysis was performed using the `PyDESeq2' [3] package (version 0.4.4) in Python (version 3.10.7). Only genes with adjusted p-value $< 0.05$ (adjusted using the Benjamini-Hochberg method), and log fold change $\geq 1$ were considered as significantly differentially expressed.
 
-## Pathway Enrichment Analysis
+%## Pathway Enrichment Analysis
 
-Differential enrichment analysis of pathways was carried out using the `Scipy' package (version 1.10.1) in Python (version 3.10.7).
+%Differential enrichment analysis of pathways was carried out using the `Scipy' package (version 1.10.1) in Python (version 3.10.7).
 
 ## License
 
