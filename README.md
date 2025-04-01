@@ -1,7 +1,7 @@
 # GenPath-PPH: Gene ExpressioN and PATHway network integration using Persistent Path Homology
 
 This is a supplementary material for codes used in the paper:
-Abdullahi et al., "GenPath-PPH: Integrating Gene Expression and Pathway Networks via Persistent Path Homology Enhances Detection of Disease-Relevant Pathways", submitted to Journal of Applied and Computational Topology.
+Abdullahi et al., "GenPath-PPH: Integrating Gene Expression and Pathway Networks via Persistent Path Homology Enhances Detection of Disease-Relevant Pathways", submitted to Journal of Applied and Computational Topology, 2025.
 
 ## Table of Contents
 
@@ -110,7 +110,7 @@ This codebook is provided "as is," without any warranty or guarantee of fitness 
 
 If you use this codebook in your research or publication, please cite the original paper:
 
-[Abdullahi, M.S.; Piro, R.M.; Suratanee, A.; Plaimas, K. "GenPath-PPH: Integrating Gene Expression and Pathway Networks via Persistent Path Homology Enhances Detection of Disease-Relevant Pathways". Journal of Applied and Computational Topology (Submitted) 2025]
+[Abdullahi, M.S.; Piro, R.M.; Suratanee, A.; Plaimas, K. "GenPath-PPH: Integrating Gene Expression and Pathway Networks via Persistent Path Homology Enhances Detection of Disease-Relevant Pathways". Journal of Applied and Computational Topology (Submitted), 2025]
 
 For questions or additional permissions, contact [abdullahi.sirajo@udusok.edu.ng].
 
@@ -118,13 +118,9 @@ For questions or additional permissions, contact [abdullahi.sirajo@udusok.edu.ng
 
 [1] Han, Z., Feng, W., Hu, R., Ge, Q., Ma, W., Zhang, W., Xu, S., Zhan, B., Zhang, L., Sun, X. et al. (2021). 'RNA-seq profiling reveals PBMC RNA as a potential biomarker for hepatocellular carcinoma.' Sci. Reports, 11, 17797.
 
-[2] Maria, C., Oudot, S.Y., Glisse, M. (2014). 'Gudhi: Merging computational topology and geometric data analysis.' Proceedings of the 30th International Symposium on Computational Geometry (SoCG).
+[2] Chen, D., Liu, J., Wu, J., Wei, G.-W., Pan, F., Yau, S.-T. (2023). 'Path topology in molecular and materials sciences'. The Journal of Physical Chemistry Letters 14 (4), 954–964.
 
-[3] Muzellec, B., Teleńczuk, M., Cabeli, V., Andreux, M. (2023). 'PyDESeq2: A Python Package for Bulk RNA-Seq Differential Expression Analysis.' Bioinformatics, 39, btad547.
-
-[4] Chen, D., Liu, J., Wu, J., Wei, G.-W., Pan, F., Yau, S.-T. (2023). 'Path topology in molecular and materials sciences'. The Journal of Physical Chemistry Letters 14 (4), 954–964.
-
-[5] Chowdhury, S., Mémoli, F. (2018). 'Persistent path homology of directed networks'. In: Proceedings of the Twenty-Ninth Annual ACM-SIAM Symposium on Discrete Algorithms, pp. 1152–1169.
+[3] Chowdhury, S., Mémoli, F. (2018). 'Persistent path homology of directed networks'. In: Proceedings of the Twenty-Ninth Annual ACM-SIAM Symposium on Discrete Algorithms, pp. 1152–1169.
 
 ## Installation
 
