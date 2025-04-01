@@ -88,7 +88,7 @@ The code in this repository is licensed under the **MIT License**. You are free 
 - The original copyright notice and the MIT License text must be included in all copies or substantial portions of the code.
 - The code is provided "as is," without warranty of any kind.
 
-For the full MIT License text, please see the [LICENSE](./LICENSE) file.
+For the full MIT License text, please see the [LICENSE](./LICENSE.txt) file.
 
 ---
 
