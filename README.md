@@ -15,7 +15,7 @@ Abdullahi et al., "GenPath-PPH: Integrating Gene Expression and Pathway Networks
 
 ## Introduction
 
-This project contains the code and methodology described in the manuscript **GenPath-PPH**, which introduces a novel approach for detecting disease-relevant pathways by integrating gene expression data with biological pathway networks using persistent path homology (PPH). The approach enhances the ability to detect pathways that are significantly altered in disease conditions (hepatocellular carcinoma (HCC)) from peripheral blood mononuclear cell (PBMC) samples.
+This project contains the code and methodology described in the manuscript **GenPath-PPH**, which introduces a novel approach for detecting disease-relevant pathways by integrating gene expression data with biological pathway networks using persistent path homology (PPH). The approach enhances the ability to detect pathways that are significantly altered in disease conditions, such as hepatocellular carcinoma (HCC) from peripheral blood mononuclear cell (PBMC) samples.
 
 ## Datasets
 
@@ -33,7 +33,9 @@ This project
 The core methodology consists of the following steps to identify pathways that are most likely to be implicated in diseases.
 
 ### 1. **Data Preparation**
-- **Pathway-Specific Gene Expression Datasets**: The first step involves extracting gene expression data specific to each biological pathway. This is done by identifying the genes involved in each pathway, and then creating pathway-specific datasets based on their expression profiles.
+- **Data Peprocessing**: The first step involves applying TPM to normalize the gene expression data and log2-transform it to account for transcript length and sequencing depth, and to stabilize variance, respectively.
+
+- **Pathway-Specific Gene Expression Datasets**: Next, the gene expression data specific to each biological pathway is extracted. This is done by identifying the genes involved in each pathway, and then creating pathway-specific datasets based on their expression profiles.
 
 - **Condition Grouping**: The dataset is then divided into different condition groups (e.g., **HCC vs Control**) based on sample conditions. This allows the analysis of how gene expression changes between the two conditions and impacts the pathway structure.
 
