@@ -81,20 +81,34 @@ All permutation tests were performed using Python (version 3.12.6) and the Benja
 
 ## License
 
-This codebook is licensed under the [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/).
+## Code License
 
-**You are free to:**
-- **Share:** Copy and redistribute the material in any medium or format.
-- **Adapt:** Remix, transform, and build upon the material for any purpose, even commercially.
+The code in this repository is licensed under the **MIT License**. You are free to use, modify, and distribute the code, provided that the following conditions are met:
 
-**Under the following terms:**
-- **Attribution:** You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
+- The original copyright notice and the MIT License text must be included in all copies or substantial portions of the code.
+- The code is provided "as is," without warranty of any kind.
 
-**No additional restrictions:** You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.
+For the full MIT License text, please see the [LICENSE](./LICENSE) file.
 
-This codebook is provided "as is," without any warranty or guarantee of fitness for a particular purpose. The codebook's users are solely responsible for their use and any consequences thereof.
+---
 
-If you use this codebook in your research or publication, please cite the original paper:
+## Data License
+
+The data in this repository is licensed under the **Creative Commons Attribution 4.0 International License (CC BY 4.0)**. You are free to:
+
+- **Share**: Copy and redistribute the material in any medium or format.
+- **Adapt**: Remix, transform, and build upon the material for any purpose, including commercial purposes.
+
+Under the following conditions:
+
+- **Attribution**: You must provide appropriate credit, give a link to the license, and indicate if changes were made. You may do this in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
+- **No additional restrictions**: You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.
+
+The data is provided "as is," without any warranty of fitness for a particular purpose. Users are solely responsible for their use of the data and any consequences thereof.
+
+For the full Creative Commons Attribution 4.0 International License text, please visit the [CC BY 4.0 License](https://creativecommons.org/licenses/by/4.0/).
+
+If you use this codebook in your research or publication, please cite:
 
 [Abdullahi, M.S.; Piro, R.M.; Suratanee, A.; Plaimas, K. "GenPath-PPH: Integrating Gene Expression and Pathway Networks via Persistent Path Homology Enhances Detection of Disease-Relevant Pathways". Journal of Applied and Computational Topology (Submitted), 2025]
 
