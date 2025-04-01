@@ -8,7 +8,7 @@ Abdullahi et al., "GenPath-PPH: Integrating Gene Expression and Pathway Networks
 - [Introduction](#introduction)
 - [Datasets](#datasets)
 - [GenPath-PPH Analysis](#GenPath-PPH-Analysis)
-- [Permutation Test](#permutation-test)
+- [Project Dependencies](#project-dependencies)
 - [License](#license)
 - [Installation](#installation)
 
@@ -55,33 +55,40 @@ Calculate the average persistence landscapes for each group (disease and control
 #### b. **Pathway-Level Differences**:
 Use Kolmogorov-Smirnov (KS) tests and Cohen’s $d$ to compute statistical significance via permutation testing.
 
-### Project Dependencies
+## Project Dependencies
 
-- **PathHom**: We modify the 'PathHom' [2] code to perform PPH computations and obtain the series of Betti numbers. You can find the original 'PathHom' code at [https://github.com/WeilabMSU/PathHom](https://github.com/WeilabMSU/PathHom).
+The following dependencies are required for running the analysis:
 
-### Persistent Path Homology Computation
+### 1. **PathHom**  
+We modified the [PathHom](https://github.com/WeilabMSU/PathHom) code to perform Persistent Path Homology (PPH) computations and obtain the series of Betti numbers.
 
-- **Dissimilarity Distance Matrix**: The persistent homology computations were based on the inter-gene dissimilarity distance matrix, calculated using  $1 - |\rho|$, where $\rho$ is the Pearson correlation coefficient.
+### 2. **Python Libraries**  
+The following Python libraries are used in this project:
 
-- **Path Complexes Construction**: We adopted the VR complexes construction method to create the simplicial complexes for our sample point clouds.
+- **`persim`**: Used for persistence landscape (PL) related computations.
+- **`scipy`**: Used for Kolmogorov-Smirnov (KS) test statistics and effect size computations.
+- **`seaborn`**: Used for advanced statistical visualizations.
+- **`matplotlib.pyplot`**: Used for general plotting.
+- **`mpl_toolkits.mplot3d`**: Used for 3D plotting.
+- **`statsmodels`**: Used for applying the Benjamini–Hochberg correction method for multiple testing.
 
-### Topological Descriptors
+### 3. **Persistent Path Homology Computation**
 
-- **User-Friendly Functions**: To simplify the calculation of topological descriptors, we have provided user-friendly functions that assist with the computations and further analysis.
+- **Dissimilarity Distance Matrix**: The persistent homology computations are based on the inter-gene dissimilarity distance matrix, calculated using $1 - |\rho|$, where $\rho$ is the Pearson correlation coefficient.
 
-### Visualization
+- **Path Complex Construction**: For each pathway and condition, the path complexes were constructed using both gene point clouds obtained from the dissimilarity matrix and the pathway network matrix.
 
-- **Persistence Diagrams and Barcodes**: The persistence diagrams and persistence barcodes were plotted using the 'plot_persistence_diagram' and 'plot_persistence_barcode' functions from the 'Gudhi' library in Python.
+### 4. **Visualization**  
+Custom plotting functions were created using the above libraries to generate visualizations:
 
-- Custom plotting functions were created using the `seaborn` and 'matplotlib.pyplot' and 'mpl_toolkits.mplot3d' libraries to generate additional plots.
+- **Persistence Diagrams and Barcodes**: These were plotted using the `plot_persistence_diagram` and `plot_persistence_barcode` functions from the 'Gudhi' library in Python.
 
-## Permutation Test
-
-All permutation tests were performed using Python (version 3.12.6) and the Benjamini–Hochberg correction method was applied for multiple testing using 'statsmodels' package (version 0.13.5). The False Discovery Rate (FDR) threshold was set to $< 0.05$ throughout.
+### 5. **Permutation Test**  
+Permutation tests were performed using Python (version 3.12.6), and the **Benjamini–Hochberg** correction method for multiple testing was applied using the **`statsmodels`** package (version 0.13.5). The False Discovery Rate (FDR) threshold was set to $< 0.05$ throughout.
 
 ## License
 
-## Code License
+### Code License
 
 The code in this repository is licensed under the **MIT License**. You are free to use, modify, and distribute the code, provided that the following conditions are met:
 
@@ -92,7 +99,7 @@ For the full MIT License text, please see the [LICENSE](./LICENSE.txt) file.
 
 ---
 
-## Data License
+### Data License
 
 The data in this repository is licensed under the **Creative Commons Attribution 4.0 International License (CC BY 4.0)**. You are free to:
 
