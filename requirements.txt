@@ -1,0 +1,9 @@
+
+persim==0.2.1
+scipy==1.14.1
+seaborn==0.11.2
+matplotlib==3.4.3
+mpl_toolkits==3.1.1
+statsmodels==0.13.5
+biopython==1.76
+GSEApy==1.1.3
