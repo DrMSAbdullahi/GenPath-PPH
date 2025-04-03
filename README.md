@@ -72,7 +72,6 @@ The following Python libraries are required:
 - **`seaborn==0.11.2`**: Used for advanced statistical visualizations.
 - **`matplotlib==3.4.3`**: Used for general plotting.
 - **`mpl_toolkits==3.1.1`**: Used for 3D plotting.
-- **`GSEApy==1.1.3`**: Used for Gene Set Enrichment Analysis (GSEA).
 
 ### 3. **R Libraries**  
 The following R packages are required:
@@ -80,7 +79,6 @@ The following R packages are required:
 - **`annotationDbi==1.66.0`**: Used for database management and gene annotation.
 - **`org.Hs.eg.db==3.19.1`**: Homo sapiens genome annotation package.
 - **`edgeR==3.42.4`**: Used for data normalization and transformation.
-- **`DESeq2==1.44.0`**: Used for differential expression analysis of RNA-seq data.
 
 ### 4. **Persistent Path Homology Computation**
 
