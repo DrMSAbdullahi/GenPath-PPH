@@ -67,11 +67,11 @@ The following Python libraries are required:
 
 - **`persim==0.2.1`**: Used for persistence landscape (PL) related computations.
 - **`scipy==1.14.1`**: Used for Kolmogorov-Smirnov (KS) test statistics and effect size computations.
+- **`statsmodels==0.13.5`**: Used for applying the Benjamini–Hochberg correction method for multiple testing.
+- **`biopython==1.76`**: Used for bioinformatics functionalities.
 - **`seaborn==0.11.2`**: Used for advanced statistical visualizations.
 - **`matplotlib==3.4.3`**: Used for general plotting.
 - **`mpl_toolkits==3.1.1`**: Used for 3D plotting.
-- **`statsmodels==0.13.5`**: Used for applying the Benjamini–Hochberg correction method for multiple testing.
-- **`biopython==1.76`**: Used for bioinformatics functionalities.
 - **`GSEApy==1.1.3`**: Used for Gene Set Enrichment Analysis (GSEA).
 
 ### 3. **R Libraries**  
@@ -79,8 +79,8 @@ The following R packages are required:
 
 - **`annotationDbi==1.66.0`**: Used for database management and gene annotation.
 - **`org.Hs.eg.db==3.19.1`**: Homo sapiens genome annotation package.
-- **`edgeR==3.42.4`**: Used for differential expression analysis of RNA-seq data.
-- **`DESeq2==1.44.0`**: Used for differential expression analysis with RNA-seq data.
+- **`edgeR==3.42.4`**: Used for data normalization and transformation.
+- **`DESeq2==1.44.0`**: Used for differential expression analysis of RNA-seq data.
 
 ### 4. **Persistent Path Homology Computation**
 
