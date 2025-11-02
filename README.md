@@ -178,25 +178,38 @@ paths = utils.generate_allowed_paths(network, max_length=2)
 boundaries = core.compute_boundaries(paths)
 ```
 
-### Run example scripts:
+### Run some examples
 
-```bash
-python examples/example1.py
-python examples/example2.py
-```
-
-These scripts demonstrate PPH calculations, Betti number computation, and visualization for selected pathways.
-
-### Run the toy PPH test
-
-The core module includes a built-in toy example. Run it to see a simple PPH computation:
+**1. Toy example test** This is small simulated gene expression dataset and toy graph used in our manuscript to demonstrate PPH computation:
 ```bash
 python core.py --test
 ```
-This will:
+Running above will:
 - Generate a small simulated gene expression dataset.
 - Compute persistent path homology on a toy graph.
 - Print Betti numbers for each dimension across the filtration.
+
+**2. Example for real pathways** This demononstrate PPH computation for real biological pathways (p53 signaling pathway and ferroptosis):
+
+```bash
+python examples/p53_signaling.py
+python examples/ferroptosis.py
+```
+
+**3. Jupyter Notebook examples** – A detailed analysis comparing PH vs PPH on a toy example, including visualization of barcodes. And a code for global dofference analysis and pathway identification via pathway level analysis:
+
+```bash
+jupyter notebook notebooks/toy_example_ph_vs_pph.ipynb
+jupyter notebook notebooks/genpath_pph_global.ipynb
+jupyter notebook notebooks/genpath_pph_pathway_level.ipynb
+```
+
+These examples demonstrate how to compute PPH (Betti number computation), visualize topological features, and interpret identified pathways.
+
+### Run the toy PPH test
+
+
+
 
 ### Jupyter Notebook Example
 
