@@ -29,12 +29,13 @@ Abdullahi et al., "GenPath-PPH: Integrating Gene Expression and Pathway Networks
 
 We used the following datasets in our project. 
 
-- **RNA-Seq Gene Expression Dataset**: This dataset comprises 26,575 gene expressions from 34 samples, with 17 representing healthy samples and 17 representing disease samples. The original dataset was sourced from the study by Han et al.[1], titled 'RNA-seq profiling reveals PBMC RNA as a potential biomarker for hepatocellular carcinoma.' To access the original sequencing data, please refer to NCBI project PRJNA739257 [here](https://dataview.ncbi.nlm.nih.gov/object/PRJNA739257).
-This project 
+- **RNA-Seq Gene Expression**: This comprises 26,575 genes from 34 samples (17 healthy, 17 disease). Original data from Han et al.[1], NCBI project PRJNA739257 [here](https://dataview.ncbi.nlm.nih.gov/object/PRJNA739257). 
 
-- **KEGG Pathways Dataset**: We obtained KEGG pathway datasets from the KEGG database using the R software packages AnnotationDbi (v1.66.0) and org.Hs.eg.db (v3.19.1) with (R v4.4.1). Our focus was specifically on the 251 metabolic and signaling pathways.
+- **KEGG Pathways**: We obtained 251 metabolic and signaling pathways from the KEGG database using the packages; 'AnnotationDbi' (v1.66.0) and 'org.Hs.eg.db' (v3.19.1) in R (v4.4.1).
 
-- **KEGG Pathways Networks**: Pathway interactions/networks (e.g., activations, inhibitions) were parsed from KEGG Markup Language (KGML) files downloaded from the KEGG website (https://www.genome.jp/kegg/pathway.html).
+- **Pathways Networks**: Interaction networks (e.g., activations, inhibitions) parsed from KEGG Markup Language (KGML) files downloaded from the KEGG website (https://www.genome.jp/kegg/pathway.html).
+
+---
 
 ## GenPath-PPH Analysis
 
@@ -62,6 +63,31 @@ Calculate the average persistence landscapes for each group (disease and control
 
 #### b. **Pathway-Level Differences**:
 Use Kolmogorov-Smirnov (KS) tests and Cohen’s $d$ to compute statistical significance via permutation testing.
+
+---
+
+## Usage
+
+Import the package in Python:
+
+```bash
+from genpath_pph import core, utils
+
+# Example: generate allowed paths
+paths = utils.generate_allowed_paths(network, max_length=3)
+
+# Example: compute boundaries
+boundaries = core.compute_boundaries(paths)
+
+Run example scripts:
+
+```bash
+python examples/example1.py
+python examples/example2.py
+
+These scripts demonstrate PPH calculations, Betti number computation, and visualization for selected pathways.
+
+---
 
 ## Project Dependencies
 
@@ -131,11 +157,15 @@ The data is provided "as is," without any warranty of fitness for a particular p
 
 For the full Creative Commons Attribution 4.0 International License text, please visit the [CC BY 4.0 License](https://creativecommons.org/licenses/by/4.0/).
 
+---
+
 If you use this codebook in your research or publication, please cite:
 
 [Abdullahi, M.S.; Piro, R.M.; Suratanee, A.; Plaimas, K. "GenPath-PPH: Integrating Gene Expression and Pathway Networks via Persistent Path Homology Enhances Detection of Disease-Relevant Pathways". Journal of Applied and Computational Topology (Submitted), 2025]
 
 For questions or additional permissions, contact [abdullahi.sirajo@udusok.edu.ng].
+
+---
 
 #### References
 
@@ -144,6 +174,8 @@ For questions or additional permissions, contact [abdullahi.sirajo@udusok.edu.ng
 [2] Chen, D., Liu, J., Wu, J., Wei, G.-W., Pan, F., Yau, S.-T. (2023). 'Path topology in molecular and materials sciences'. The Journal of Physical Chemistry Letters 14 (4), 954–964.
 
 [3] Chowdhury, S., Mémoli, F. (2018). 'Persistent path homology of directed networks'. In: Proceedings of the Twenty-Ninth Annual ACM-SIAM Symposium on Discrete Algorithms, pp. 1152–1169.
+
+---
 
 ## Installation
 
@@ -156,3 +188,6 @@ cd GenPath-PPH
 
 # Install the necessary packages
 pip install -r requirements.txt
+
+---
+
