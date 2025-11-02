@@ -180,7 +180,7 @@ boundaries = core.compute_boundaries(paths)
 
 ### Run some examples
 
-**1. Toy example test** This is small simulated gene expression dataset and toy graph used in our manuscript to demonstrate PPH computation:
+**1. Toy example test** This is a small simulated gene expression dataset and toy graph used in our manuscript to demonstrate PPH computation:
 ```bash
 python core.py --test
 ```
@@ -205,19 +205,6 @@ jupyter notebook notebooks/genpath_pph_pathway_level.ipynb
 ```
 
 These examples demonstrate how to compute PPH (Betti number computation), visualize topological features, and interpret identified pathways.
-
-### Run the toy PPH test
-
-
-
-
-### Jupyter Notebook Example
-
-For a more detailed analysis, including visualization of Betti number evolution and barcode plots:
-
-```bash
-jupyter notebook notebooks/toy_example_ph_vs_pph.ipynb
-```
 
 ---
 
