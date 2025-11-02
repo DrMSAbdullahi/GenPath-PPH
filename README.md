@@ -121,6 +121,32 @@ The following packages were used only for benchmarking or comparison:
 
 ---
 
+## Core Module and Enhancements
+
+The main computation is implemented in core.py through the GenPathHomology class (an extended version of PathHomology). This module performs Persistent Path Homology (PPH) analysis on pathway networks by integrating:
+- **Point clouds** derived from gene expression data.
+- **Directed graphs (digraphs)** obtained from KEGG pathway networks.
+
+Integration is achieved by masking the point cloud with the corresponding digraph, combining both gene-level and network-level information into a unified representation.
+
+#### Enhancements in GenPath-PPH
+
+Compared to the original PathHom implementation, this version introduces several improvements:
+
+- **Flexible distance metrics**: Users can choose among multiple distance options for computing pairwise relationships between genes:
+   - euclidean (used in PathHom)
+   - 1 - correlation
+   - 1 - |correlation| (default for GenPath-PPH)
+
+- **Filtration-level edge tracking**: In addition to Betti number distributions (series), the function also returns the set of edges active (present) at each filtration level, allowing detailed inspection of the evolving topological structure.
+
+- **Integration-ready output**: 
+For each pathway and condition, the framework produces:
+   - Betti number series describing topological changes across filtrations.
+   - Filtration-level edge sets tracking the evolution of gene interactions.
+
+---
+
 ## Installation
 
 To use this code, you will need Python and several dependencies. You can install them using `pip`:
