@@ -1,21 +1,29 @@
 # GenPath-PPH: Gene ExpressioN and PATHway network integration using Persistent Path Homology
 
-This is a supplementary material for codes used in the paper:
-Abdullahi et al., "GenPath-PPH: Integrating Gene Expression and Pathway Networks via Persistent Path Homology Enhances Detection of Disease-Relevant Pathways", submitted to Journal of Applied and Computational Topology, 2025.
+This repository contains the code and supplementary material for the manuscript:
+Abdullahi et al., "GenPath-PPH: Integrating Gene Expression and Pathway Networks via Persistent Path Homology Enhances Detection of Disease-Relevant Pathways", submitted to *Computational and Structural Biotechnology Journal*, 2025.
+
+---
 
 ## Table of Contents
 
 - [Introduction](#introduction)
 - [Datasets](#datasets)
 - [GenPath-PPH Analysis](#GenPath-PPH-Analysis)
+- [Project Structure](#project-structure)
+- [Installation](#installation)
+- [Usage](#usage)
 - [Project Dependencies](#project-dependencies)
 - [License](#license)
-- [Installation](#installation)
+- [References](#references)
 
+---
 
 ## Introduction
 
-This project contains the code and methodology described in the manuscript **GenPath-PPH**, which introduces a novel approach for detecting disease-relevant pathways by integrating gene expression data with biological pathway networks using persistent path homology (PPH). The approach enhances the ability to detect pathways that are significantly altered in disease conditions, such as hepatocellular carcinoma (HCC) from peripheral blood mononuclear cell (PBMC) samples.
+**GenPath-PPH** introduces a novel approach for detecting disease-relevant pathways by integrating gene expression data with biological pathway networks using **persistent path homology (PPH)**. This enables detection of pathways significantly altered in disease conditions, exemplified with **hepatocellular carcinoma (HCC)** from peripheral blood mononuclear cell (PBMC) samples.
+
+---
 
 ## Datasets
 
