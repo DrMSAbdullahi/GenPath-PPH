@@ -180,24 +180,26 @@ boundaries = core.compute_boundaries(paths)
 
 ### Run some examples
 
-**1. Toy example test** This is a small simulated gene expression dataset and toy graph used in our manuscript to demonstrate PPH computation:
+**1. Toy example test** - This is a small simulated gene expression dataset and toy graph used in our manuscript to demonstrate PPH computation:
 ```bash
 python core.py --test
 ```
-Running above will:
+Running the above will:
 - Generate a small simulated gene expression dataset.
 - Compute persistent path homology on a toy graph.
 - Print Betti numbers for each dimension across the filtration.
 
-**2. Example for real pathways** This demononstrate PPH computation for real biological pathways (p53 signaling pathway and ferroptosis):
+**2. Example for real pathways** - Demononstrates PPH computation for real biological pathways (p53 signaling pathway and ferroptosis):
 
 ```bash
 python examples/p53_signaling.py
 python examples/ferroptosis.py
 ```
 
-**3. Jupyter Notebook examples** – A detailed analysis comparing PH vs PPH on a toy example, including visualization of barcodes. And a code for global dofference analysis and pathway identification via pathway level analysis:
-
+**3. Jupyter Notebook examples** - Detailed analyses on HCC gene expression data, including:
+- Comparing PH vs PPH on a toy example.
+- Global difference analysis across HCC samples.
+- Pathway-level analysis to identify significant pathways.
 ```bash
 jupyter notebook notebooks/toy_example_ph_vs_pph.ipynb
 jupyter notebook notebooks/genpath_pph_global.ipynb
