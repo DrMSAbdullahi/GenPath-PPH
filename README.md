@@ -147,7 +147,6 @@ python examples/example1.py
 python examples/example2.py
 
 These scripts demonstrate PPH calculations, Betti number computation, and visualization for selected pathways.
-```
 
 ---
 
@@ -168,6 +167,7 @@ GenPath-PPH/
 │   ├── example1.py
 │   └── example2.py
 └── tests/                  # Optional unit tests
+```
 
 ---
 
