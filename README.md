@@ -123,7 +123,7 @@ The following packages were used only for benchmarking or comparison:
 
 ## Core Module and Enhancements
 
-The main computation is implemented in 'core.py' through the GenPathHomology class (an extended version of PathHomology). This module performs Persistent Path Homology (PPH) analysis on pathway networks by integrating:
+The main computation is implemented in `core.py` through the GenPathHomology class (an extended version of PathHomology). This module performs Persistent Path Homology (PPH) analysis on pathway networks by integrating:
 - **Point clouds** derived from gene expression data.
 - **Directed graphs (digraphs)** obtained from KEGG pathway networks.
 
@@ -134,9 +134,9 @@ Integration is achieved by masking the point cloud with the corresponding digrap
 Compared to the original PathHom implementation, this version introduces several improvements:
 
 - **Flexible distance metrics**: Users can choose among multiple distance options for computing pairwise relationships between genes:
-   - 'euclidean' (used in PathHom)
-   - '1 - correlation'
-   - '1 - |correlation|' (default for GenPath-PPH)
+   - `euclidean` (used in PathHom)
+   - `1 - correlation`
+   - `1 - |correlation|` (default for GenPath-PPH)
 
 - **Filtration-level edge tracking**: In addition to Betti number distributions (series), the function also returns the set of edges active (present) at each filtration level, allowing detailed inspection of the evolving topological structure.
 
@@ -166,24 +166,45 @@ pip install -r requirements.txt
 
 ## Usage
 
-Import the package in Python:
+### Import the package in Python
 
-```bash
+```python
 from genpath_pph import core, utils
 
 # Example: generate allowed paths
-paths = utils.generate_allowed_paths(network, max_length=3)
+paths = utils.generate_allowed_paths(network, max_length=2)
 
 # Example: compute boundaries
 boundaries = core.compute_boundaries(paths)
 ```
-Run example scripts:
+
+### Run example scripts:
 
 ```bash
 python examples/example1.py
 python examples/example2.py
+```
 
 These scripts demonstrate PPH calculations, Betti number computation, and visualization for selected pathways.
+
+### Run the toy PPH test
+
+The core module includes a built-in toy example. Run it to see a simple PPH computation:
+```bash
+python core.py --test
+```
+This will:
+- Generate a small simulated gene expression dataset.
+- Compute persistent path homology on a toy graph.
+- Print Betti numbers for each dimension across the filtration.
+
+### Jupyter Notebook Example
+
+For a more detailed analysis, including visualization of Betti number evolution and barcode plots:
+
+```bash
+jupyter notebook notebooks/toy_example_ph_vs_pph.ipynb
+```
 
 ---
 
