@@ -58,7 +58,7 @@ The output comprises two sets of Betti numbers (for **HCC** and **Control**), de
 ### 3. **Statistical Significance**
 
 #### a. **Global Differences**:
-Persistence landscapes (PLs) were obtained for each pathway output from the PPH computation. The average landscape was then computed for each group (**HCC** and **Control**). The difference between these average landscapes was quantified using the supremum norm ($|\cdot|_{\infty}$) and the $L_{1/2}$-norm, and the statistical significance of these differences was evaluated through permutation testing.
+Persistence landscapes (PLs) were obtained for each pathway output from the PPH computation. The average landscape was then computed for each group (**HCC** and **Control**). The difference between these average landscapes was quantified using the supremum norm ($\|\cdot\|$∞) and the $L_{1,2}$-norm, and the statistical significance of these differences was evaluated through permutation testing.
 
 #### b. **Pathway-Level Differences**:
 Kolmogorov–Smirnov (KS) tests and Cohen’s $d$ were applied to quantify the statistical significance of the differences observed between the two conditions (**HCC** and **Control**) for each pathway through permutation testing.
