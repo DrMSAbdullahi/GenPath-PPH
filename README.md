@@ -64,6 +64,55 @@ Calculate the average persistence landscapes for each group (disease and control
 #### b. **Pathway-Level Differences**:
 Use Kolmogorov-Smirnov (KS) tests and Cohen’s $d$ to compute statistical significance via permutation testing.
 
+### 4. **Persistent Path Homology Computation**
+
+- **Dissimilarity Distance Matrix**: The persistent homology computations are based on the inter-gene dissimilarity distance matrix, calculated using $1 - |\rho|$, where $\rho$ is the Pearson correlation coefficient.
+
+- **Path Complex Construction**: For each pathway and condition, the path complexes were constructed using both gene point clouds obtained from the dissimilarity matrix and the pathway network matrix.
+
+### 5. **Visualization**  
+Custom plotting functions were created using the above libraries to generate visualizations:
+
+- **Persistence Diagrams and Barcodes**: These were plotted using the `plot_persistence_diagram` and `plot_persistence_barcode` functions from the 'Gudhi' library in Python.
+
+### 6. **Permutation Test**  
+Permutation tests were performed using Python (version 3.12.6), and the **Benjamini–Hochberg** correction method for multiple testing was applied using the **`statsmodels`** package (version 0.13.5). The False Discovery Rate (FDR) threshold was set to $< 0.05$ throughout.
+
+---
+
+## Project Structure
+
+```text
+GenPath-PPH/
+│
+├── README.md
+├── LICENSE
+├── requirements.txt        # Python dependencies
+├── genpath_pph/            # Core package
+│   ├── __init__.py
+│   ├── core.py             # Core PPH computations
+│   ├── utils.py            # Utility functions
+│   └── analysis.py         # Optional analysis scripts
+├── examples/               # Example scripts
+│   ├── example1.py
+│   └── example2.py
+└── tests/                  # Optional unit tests
+
+---
+
+## Installation
+
+To use this code, you will need Python and several dependencies. You can install them using `pip`:
+
+```bash
+# Clone the repository
+git clone https://github.com/DrMSAbdullahi/GenPath-PPH.git
+cd GenPath-PPH
+
+# Install the necessary packages
+pip install -r requirements.txt
+```
+
 ---
 
 ## Usage
@@ -94,10 +143,7 @@ These scripts demonstrate PPH calculations, Betti number computation, and visual
 
 The following dependencies are required for running the analysis:
 
-### 1. **PathHom**  
-We modified the [PathHom](https://github.com/WeilabMSU/PathHom) code to perform Persistent Path Homology (PPH) computations and obtain the series of Betti numbers.
-
-### 2. **Python Libraries**  
+### 1. **Python Libraries**  
 The following Python libraries are required:
 
 - **`persim==0.2.1`**: Used for persistence landscape (PL) related computations.
@@ -108,26 +154,22 @@ The following Python libraries are required:
 - **`matplotlib==3.4.3`**: Used for general plotting.
 - **`mpl_toolkits==3.1.1`**: Used for 3D plotting.
 
-### 3. **R Libraries**  
+### 2. **R Libraries**  
 The following R packages are required:
 
 - **`annotationDbi==1.66.0`**: Used for database management and gene annotation.
 - **`org.Hs.eg.db==3.19.1`**: Homo sapiens genome annotation package.
 - **`edgeR==3.42.4`**: Used for data normalization and transformation.
 
-### 4. **Persistent Path Homology Computation**
+### 3. **GenPath-PPH Core Framework**  
+This framework builds on a modified version of [PathHom](https://github.com/WeilabMSU/PathHom), where correlation-based dissimilarity and filtration-level edge interaction tracking functions were added to enhance the PPH computation.
 
-- **Dissimilarity Distance Matrix**: The persistent homology computations are based on the inter-gene dissimilarity distance matrix, calculated using $1 - |\rho|$, where $\rho$ is the Pearson correlation coefficient.
+### 4. **External Tools Used for Comparison**
+The following packages were used only for benchmarking or comparison:
+- **DESeq2 (R package)**: Used for differential gene expression (DEG) analysis.
+- **gseapy (v1.1.3)**: Used for Gene Set Enrichment Analysis (GSEA).
 
-- **Path Complex Construction**: For each pathway and condition, the path complexes were constructed using both gene point clouds obtained from the dissimilarity matrix and the pathway network matrix.
-
-### 5. **Visualization**  
-Custom plotting functions were created using the above libraries to generate visualizations:
-
-- **Persistence Diagrams and Barcodes**: These were plotted using the `plot_persistence_diagram` and `plot_persistence_barcode` functions from the 'Gudhi' library in Python.
-
-### 6. **Permutation Test**  
-Permutation tests were performed using Python (version 3.12.6), and the **Benjamini–Hochberg** correction method for multiple testing was applied using the **`statsmodels`** package (version 0.13.5). The False Discovery Rate (FDR) threshold was set to $< 0.05$ throughout.
+---
 
 ## License
 
@@ -175,20 +217,6 @@ For questions or additional permissions, contact [abdullahi.sirajo@udusok.edu.ng
 [2] Chen, D., Liu, J., Wu, J., Wei, G.-W., Pan, F., Yau, S.-T. (2023). 'Path topology in molecular and materials sciences'. The Journal of Physical Chemistry Letters 14 (4), 954–964.
 
 [3] Chowdhury, S., Mémoli, F. (2018). 'Persistent path homology of directed networks'. In: Proceedings of the Twenty-Ninth Annual ACM-SIAM Symposium on Discrete Algorithms, pp. 1152–1169.
-
----
-
-## Installation
-
-To use this code, you will need Python and several dependencies. You can install them using `pip`:
-
-```bash
-# Clone the repository
-git clone https://github.com/DrMSAbdullahi/GenPath-PPH.git
-cd GenPath-PPH
-
-# Install the necessary packages
-pip install -r requirements.txt
 
 ---
 
