@@ -58,7 +58,7 @@ The output comprises two sets of Betti numbers (for **HCC** and **Control**), de
 ### 3. **Statistical Significance**
 
 #### a. **Global Differences**:
-Persistence landscapes (PLs) were obtained for each pathway output from the PPH computation. The average landscape was then computed for each group (**HCC** and **Control**). The difference between these average landscapes was quantified using the supremum norm ($\|\cdot\|$∞) and the $L_{1,2}$-norm, and the statistical significance of these differences was evaluated through permutation testing.
+Persistence landscapes (PLs) were obtained for each pathway output from the PPH computation. The average landscape was then computed for each group (**HCC** and **Control**). The difference between these average landscapes was quantified using the supremum norm ($\|\cdot\|$_∞) and the $L_{1,2}$-norm, and the statistical significance of these differences was evaluated through permutation testing.
 
 #### b. **Pathway-Level Differences**:
 Kolmogorov–Smirnov (KS) tests and Cohen’s $d$ were applied to quantify the statistical significance of the differences observed between the two conditions (**HCC** and **Control**) for each pathway through permutation testing.
@@ -72,12 +72,20 @@ The obtained $p$-values were corrected for multiple testing using the Benjamini�
 - **Path Complex Construction**: For each pathway and condition, path complexes are built using gene point clouds obtained from the dissimilarity matrix and the underlying pathway network structure.
 
 ### 5. **Visualization**  
-Custom plotting functions were created using the above libraries to generate visualizations:
-Custom visualization scripts were implemented to illustrate topological features:
-- **Persistence Diagrams and Barcodes**: These were plotted using the `plot_persistence_diagram` and `plot_persistence_barcode` functions from the 'Gudhi' library in Python.
 
-### 6. **Permutation Test**  
-Permutation tests were performed using Python (version 3.12.6), and the **Benjamini–Hochberg** correction method for multiple testing was applied using the **`statsmodels`** package (version 0.13.5). The False Discovery Rate (FDR) threshold was set to $< 0.05$ throughout.
+Custom and library-based visualization scripts were implemented to illustrate both network-level and topological features.
+
+- **Custom Visualizations**:  
+  - **Correlation Heatmaps** showing inter-gene relationships within each pathway.  
+  - **Betti Number Evolution Plots** across filtration values.  
+  - **PCA Plots** for sample clustering.  
+  - **UpSet Plots** for pathway overlap and intersection analysis.  
+
+- **Library-Based Visualizations (Gudhi)**:  
+  - **Persistence Diagrams** using `plot_persistence_diagram`.  
+  - **Persistence Barcodes** using `plot_persistence_barcode`.  
+
+These visualizations provide both qualitative and quantitative insights into the topological evolution and expression variability of pathways under different biological conditions.
 
 ---
 
