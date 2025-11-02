@@ -78,7 +78,7 @@ paths = utils.generate_allowed_paths(network, max_length=3)
 
 # Example: compute boundaries
 boundaries = core.compute_boundaries(paths)
-
+```
 Run example scripts:
 
 ```bash
@@ -86,6 +86,7 @@ python examples/example1.py
 python examples/example2.py
 
 These scripts demonstrate PPH calculations, Betti number computation, and visualization for selected pathways.
+```
 
 ---
 
