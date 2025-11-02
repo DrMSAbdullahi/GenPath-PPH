@@ -9,11 +9,11 @@ Abdullahi et al., "GenPath-PPH: Integrating Gene Expression and Pathway Networks
 
 - [Introduction](#introduction)
 - [Datasets](#datasets)
-- [GenPath-PPH Analysis](#GenPath-PPH-Analysis)
-- [Project Structure](#project-structure)
+- [GenPath-PPH Analysis](#genpath-pph-analysis)
+- [Project Dependencies](#project-dependencies)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Project Dependencies](#project-dependencies)
+- [Project Structure](#project-structure)
 - [License](#license)
 - [References](#references)
 
@@ -80,23 +80,35 @@ Permutation tests were performed using Python (version 3.12.6), and the **Benjam
 
 ---
 
-## Project Structure
+## Project Dependencies
 
-```text
-GenPath-PPH/
-│
-├── README.md
-├── LICENSE
-├── requirements.txt        # Python dependencies
-├── genpath_pph/            # Core package
-│   ├── __init__.py
-│   ├── core.py             # Core PPH computations
-│   ├── utils.py            # Utility functions
-│   └── analysis.py         # Optional analysis scripts
-├── examples/               # Example scripts
-│   ├── example1.py
-│   └── example2.py
-└── tests/                  # Optional unit tests
+The following dependencies are required for running the analysis:
+
+### 1. **Python Libraries**  
+The following Python libraries are required:
+
+- **`persim==0.2.1`**: Used for persistence landscape (PL) related computations.
+- **`scipy==1.14.1`**: Used for Kolmogorov-Smirnov (KS) test statistics and effect size computations.
+- **`statsmodels==0.13.5`**: Used for applying the Benjamini–Hochberg correction method for multiple testing.
+- **`biopython==1.76`**: Used for bioinformatics functionalities.
+- **`seaborn==0.11.2`**: Used for advanced statistical visualizations.
+- **`matplotlib==3.4.3`**: Used for general plotting.
+- **`mpl_toolkits==3.1.1`**: Used for 3D plotting.
+
+### 2. **R Libraries**  
+The following R packages are required:
+
+- **`annotationDbi==1.66.0`**: Used for database management and gene annotation.
+- **`org.Hs.eg.db==3.19.1`**: Homo sapiens genome annotation package.
+- **`edgeR==3.42.4`**: Used for data normalization and transformation.
+
+### 3. **GenPath-PPH Core Framework**  
+This framework builds on a modified version of [PathHom](https://github.com/WeilabMSU/PathHom), where correlation-based dissimilarity and filtration-level edge interaction tracking functions were added to enhance the PPH computation.
+
+### 4. **External Tools Used for Comparison**
+The following packages were used only for benchmarking or comparison:
+- **DESeq2 (R package)**: Used for differential gene expression (DEG) analysis.
+- **gseapy (v1.1.3)**: Used for Gene Set Enrichment Analysis (GSEA).
 
 ---
 
@@ -139,35 +151,23 @@ These scripts demonstrate PPH calculations, Betti number computation, and visual
 
 ---
 
-## Project Dependencies
+## Project Structure
 
-The following dependencies are required for running the analysis:
-
-### 1. **Python Libraries**  
-The following Python libraries are required:
-
-- **`persim==0.2.1`**: Used for persistence landscape (PL) related computations.
-- **`scipy==1.14.1`**: Used for Kolmogorov-Smirnov (KS) test statistics and effect size computations.
-- **`statsmodels==0.13.5`**: Used for applying the Benjamini–Hochberg correction method for multiple testing.
-- **`biopython==1.76`**: Used for bioinformatics functionalities.
-- **`seaborn==0.11.2`**: Used for advanced statistical visualizations.
-- **`matplotlib==3.4.3`**: Used for general plotting.
-- **`mpl_toolkits==3.1.1`**: Used for 3D plotting.
-
-### 2. **R Libraries**  
-The following R packages are required:
-
-- **`annotationDbi==1.66.0`**: Used for database management and gene annotation.
-- **`org.Hs.eg.db==3.19.1`**: Homo sapiens genome annotation package.
-- **`edgeR==3.42.4`**: Used for data normalization and transformation.
-
-### 3. **GenPath-PPH Core Framework**  
-This framework builds on a modified version of [PathHom](https://github.com/WeilabMSU/PathHom), where correlation-based dissimilarity and filtration-level edge interaction tracking functions were added to enhance the PPH computation.
-
-### 4. **External Tools Used for Comparison**
-The following packages were used only for benchmarking or comparison:
-- **DESeq2 (R package)**: Used for differential gene expression (DEG) analysis.
-- **gseapy (v1.1.3)**: Used for Gene Set Enrichment Analysis (GSEA).
+```text
+GenPath-PPH/
+│
+├── README.md
+├── LICENSE
+├── requirements.txt        # Python dependencies
+├── genpath_pph/            # Core package
+│   ├── __init__.py
+│   ├── core.py             # Core PPH computations
+│   ├── utils.py            # Utility functions
+│   └── analysis.py         # Optional analysis scripts
+├── examples/               # Example scripts
+│   ├── example1.py
+│   └── example2.py
+└── tests/                  # Optional unit tests
 
 ---
 
@@ -181,8 +181,6 @@ The code in this repository is licensed under the **MIT License**. You are free 
 - The code is provided "as is," without warranty of any kind.
 
 For the full MIT License text, please see the [LICENSE](./LICENSE.txt) file.
-
----
 
 ### Data License
 
@@ -204,7 +202,7 @@ For the full Creative Commons Attribution 4.0 International License text, please
 
 If you use this codebook in your research or publication, please cite:
 
-[Abdullahi, M.S.; Piro, R.M.; Suratanee, A.; Plaimas, K. "GenPath-PPH: Integrating Gene Expression and Pathway Networks via Persistent Path Homology Enhances Detection of Disease-Relevant Pathways". Journal of Applied and Computational Topology (Submitted), 2025]
+[Abdullahi, M.S.; Piro, R.M.; Suratanee, A.; Plaimas, K. "GenPath-PPH: Integrating Gene Expression and Pathway Networks via Persistent Path Homology Enhances Detection of Disease-Relevant Pathways". Computational and Structural Biotechnology Journal (Submitted), 2025]
 
 For questions or additional permissions, contact [abdullahi.sirajo@udusok.edu.ng].
 
@@ -217,6 +215,4 @@ For questions or additional permissions, contact [abdullahi.sirajo@udusok.edu.ng
 [2] Chen, D., Liu, J., Wu, J., Wei, G.-W., Pan, F., Yau, S.-T. (2023). 'Path topology in molecular and materials sciences'. The Journal of Physical Chemistry Letters 14 (4), 954–964.
 
 [3] Chowdhury, S., Mémoli, F. (2018). 'Persistent path homology of directed networks'. In: Proceedings of the Twenty-Ninth Annual ACM-SIAM Symposium on Discrete Algorithms, pp. 1152–1169.
-
----
 
