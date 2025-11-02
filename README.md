@@ -209,14 +209,6 @@ For the full Creative Commons Attribution 4.0 International License text, please
 
 ---
 
-If you use this codebook in your research or publication, please cite:
-
-[Abdullahi, M.S.; Piro, R.M.; Suratanee, A.; Plaimas, K. "GenPath-PPH: Integrating Gene Expression and Pathway Networks via Persistent Path Homology Enhances Detection of Disease-Relevant Pathways". Computational and Structural Biotechnology Journal (Submitted), 2025]
-
-For questions or additional permissions, contact [abdullahi.sirajo@udusok.edu.ng].
-
----
-
 #### References
 
 [1] Han, Z., Feng, W., Hu, R., Ge, Q., Ma, W., Zhang, W., Xu, S., Zhan, B., Zhang, L., Sun, X. et al. (2021). 'RNA-seq profiling reveals PBMC RNA as a potential biomarker for hepatocellular carcinoma.' Sci. Reports, 11, 17797.
@@ -225,3 +217,12 @@ For questions or additional permissions, contact [abdullahi.sirajo@udusok.edu.ng
 
 [3] Chowdhury, S., Mémoli, F. (2018). 'Persistent path homology of directed networks'. In: Proceedings of the Twenty-Ninth Annual ACM-SIAM Symposium on Discrete Algorithms, pp. 1152–1169.
 
+---
+
+### Citation
+
+If you use this codebook in your research or publication, please cite:
+
+[Abdullahi, M.S.; Piro, R.M.; Suratanee, A.; Plaimas, K. "GenPath-PPH: Integrating Gene Expression and Pathway Networks via Persistent Path Homology Enhances Detection of Disease-Relevant Pathways". Computational and Structural Biotechnology Journal (Submitted), 2025]
+
+For questions or additional permissions, contact [abdullahi.sirajo@udusok.edu.ng].
