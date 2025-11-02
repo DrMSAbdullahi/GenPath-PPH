@@ -220,12 +220,17 @@ GenPath-PPH/
 ├── requirements.txt        # Python dependencies
 ├── genpath_pph/            # Core package
 │   ├── __init__.py
-│   ├── core.py             # Core PPH computations
-│   ├── utils.py            # Utility functions
-│   └── analysis.py         # Optional analysis scripts
-├── examples/               # Example scripts
-│   ├── example1.py
-│   └── example2.py
+│   ├── core.py             # Core PPH computations, including --test toy example
+│   ├── utils.py            # Utility functions (allowed paths, boundaries, etc.)
+│   └── analysis.py         # Optional analysis scripts for custom workflows
+├── examples/               # Example scripts for toy and real pathways
+│   ├── toy_example.py      # Optional, could wrap core.py --test
+│   ├── p53_signaling.py    # Real pathway example
+│   └── ferroptosis.py      # Real pathway example
+├── notebooks/              # Jupyter notebooks for detailed analyses
+│   ├── toy_example_ph_vs_pph.ipynb     # Compare PH vs PPH on toy data
+│   ├── genpath_pph_global.ipynb        # Global difference analysis on HCC data
+│   └── genpath_pph_pathway_level.ipynb # Pathway-level analysis on HCC data
 └── tests/                  # Optional unit tests
 ```
 
