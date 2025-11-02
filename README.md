@@ -39,40 +39,41 @@ We used the following datasets in our project.
 
 ## GenPath-PPH Analysis
 
-The core methodology consists of the following steps to identify pathways that are most likely to be implicated in diseases.
+The core methodology of **GenPath-PPH** consists of the following steps for identifying pathways that are most likely implicated in disease conditions.
 
 ### 1. **Data Preparation**
-- **Data Peprocessing**: The first step involves applying TPM to normalize the gene expression data and log2-transform it to account for transcript length and sequencing depth, and to stabilize variance, respectively.
+- **Data Peprocessing**: Transcript Per Million (TPM) normalization is applied to the raw gene expression data, followed by log₂ transformation to account for transcript length, sequencing depth, and to stabilize variance.
 
-- **Pathway-Specific Gene Expression Datasets**: Next, the gene expression data specific to each biological pathway is extracted. This is done by identifying the genes involved in each pathway, and then creating pathway-specific datasets based on their expression profiles.
+- **Pathway-Specific Gene Expression**: Gene expression subsets corresponding to each biological pathway are extracted by mapping genes to their respective pathways. This yields pathway-specific datasets representing gene activity patterns within each pathway.
 
-- **Condition Grouping**: The dataset is then divided into different condition groups (e.g., **HCC vs Control**) based on sample conditions. This allows the analysis of how gene expression changes between the two conditions and impacts the pathway structure.
+- **Condition Grouping**: Samples are grouped into experimental conditions (e.g., **HCC** vs. **Control**) to examine how gene expression differences influence pathway topology.
 
-### 2. **Persistent Path Homology (PPH) Calculation**
-   For each pathway and each condition (i.e., HCC and Control), PPH is computed to track the topological changes (in both dimensions 0 and 1) in the gene expression network using
-   
-   - **Filtration Scale**: From 0 to 1, where 0 represents the highest correlation between genes and 1 represents the weakest correlation.
-   - **Step Size**: A step size of 0.01 results in 101 Betti numbers for each pathway and each condition across the filtration scale [0,1].
+### 2. **Persistent Path Homology (PPH) Computation**
+For each pathway and condition, PPH is computed to capture (track) topological changes (variations) in the gene expression network:
+   - **Filtration Scale**: Ranges from 0 to 1, where 0 represents the strongest correlation between genes and 1 represents the weakest.
+   - **Step Size**: A step of 0.01 yields 101 Betti numbers per pathway and condition across the filtration scale [0,1].
 
-The core output of the PPH computation is a series of Betti numbers, which describe the topological features of the pathway at different filtration values (gene correlation strength). The output consists of two sets of Betti numbers per pathway—one for **HCC** and one for **Control**—enabling a comparative analysis of pathway network alterations between the two conditions.
+The output comprises two sets of Betti numbers (for **HCC** and **Control**), describing how the network’s topological features evolve with varying correlation strength. This enables a comparative analysis of pathway network alterations between the two conditions.
 
 ### 3. **Statistical Significance**
 
 #### a. **Global Differences**:
-Calculate the average persistence landscapes for each group (disease and control). Then, compute the difference between them and test for significance using the supremum (sup) and 1/2-norms, via permutation testing.
+Persistence landscapes (PLs) were obtained for each pathway output from the PPH computation. The average landscape was then computed for each group (**HCC** and **Control**). The difference between these average landscapes was quantified using the supremum norm ($|\cdot|_{\infty}$) and the $L_{1/2}$-norm, and the statistical significance of these differences was evaluated through permutation testing.
 
 #### b. **Pathway-Level Differences**:
-Use Kolmogorov-Smirnov (KS) tests and Cohen’s $d$ to compute statistical significance via permutation testing.
+Kolmogorov–Smirnov (KS) tests and Cohen’s $d$ were applied to quantify the statistical significance of the differences observed between the two conditions (**HCC** and **Control**) for each pathway through permutation testing.
 
-### 4. **Persistent Path Homology Computation**
+The obtained $p$-values were corrected for multiple testing using the Benjamini–Hochberg (BH) method. The adjusted $p$-values or False Discovery Rate (FDR) threshold was set to $< 0.05$ throughout.
 
-- **Dissimilarity Distance Matrix**: The persistent homology computations are based on the inter-gene dissimilarity distance matrix, calculated using $1 - |\rho|$, where $\rho$ is the Pearson correlation coefficient.
+### 4. **PPH Implementation Details**
 
-- **Path Complex Construction**: For each pathway and condition, the path complexes were constructed using both gene point clouds obtained from the dissimilarity matrix and the pathway network matrix.
+- **Dissimilarity Matrix**: This was constructed using $1 - |\rho|$, where $\rho$ is the Pearson correlation coefficient between genes.
+
+- **Path Complex Construction**: For each pathway and condition, path complexes are built using gene point clouds obtained from the dissimilarity matrix and the underlying pathway network structure.
 
 ### 5. **Visualization**  
 Custom plotting functions were created using the above libraries to generate visualizations:
-
+Custom visualization scripts were implemented to illustrate topological features:
 - **Persistence Diagrams and Barcodes**: These were plotted using the `plot_persistence_diagram` and `plot_persistence_barcode` functions from the 'Gudhi' library in Python.
 
 ### 6. **Permutation Test**  
@@ -107,8 +108,8 @@ This framework builds on a modified version of [PathHom](https://github.com/Weil
 
 ### 4. **External Tools Used for Comparison**
 The following packages were used only for benchmarking or comparison:
-- **DESeq2 (R package)**: Used for differential gene expression (DEG) analysis.
-- **gseapy (v1.1.3)**: Used for Gene Set Enrichment Analysis (GSEA).
+- **`DESeq2 (R package)`**: Used for differential gene expression (DEG) analysis.
+- **`gseapy==v1.1.3`**: Used for Gene Set Enrichment Analysis (GSEA).
 
 ---
 
