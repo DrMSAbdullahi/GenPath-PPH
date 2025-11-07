@@ -222,9 +222,9 @@ GenPath-PPH/
 │   ├── __init__.py
 │   ├── core.py             # Core PPH computations, including --test toy example
 │   ├── utils.py            # Utility functions (allowed paths, boundaries, etc.)
-│   └── analysis.py         # Optional analysis scripts for custom workflows
+│   └── run_analysis.py         # Optional analysis scripts for custom workflows
 ├── examples/               # Example scripts for toy and real pathways
-│   ├── toy_example.py      # Optional, could wrap core.py --test
+│   ├── toy_example.py      # Wrap in core.py --test
 │   ├── p53_signaling.py    # Real pathway example
 │   └── ferroptosis.py      # Real pathway example
 ├── notebooks/              # Jupyter notebooks for detailed analyses
