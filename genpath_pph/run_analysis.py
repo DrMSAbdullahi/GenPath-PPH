@@ -1,122 +1,246 @@
 """
 run_analysis.py
+================
 
-Main script to compute persistent path homology (PPH) Betti numbers
-for multiple KEGG pathways using RNA-seq expression data.
+This script performs statistical analyses on persistence-based pathway homology (PPH) results. 
+It provides methods to quantify and test topological differences between control and disease 
+groups based on persistence landscapes and Betti number distributions.
 
-Author: Muhammad Sirajo Abdullahi
-Date: 2025-02-14
+Main functionalities:
+---------------------
+
+1. pooled_std:
+   - Computes the pooled standard deviation between two groups, used in effect size calculations.
+
+2. permutation_test_effect_size:
+   - Estimates the effect size (Cohen’s d or Kolmogorov–Smirnov statistic) between 
+     Betti number distributions of control and disease groups.
+   - Performs permutation testing to obtain empirical p-values.
+
+3. permutation_test:
+   - Conducts a permutation test on persistence landscapes using various norms (L1, L2, sup)
+     to assess global topological differences.
+
+4. global_difference_analysis:
+   - Aggregates results of the permutation tests across multiple norms.
+   - Applies Benjamini–Hochberg correction for multiple testing and reports 
+     significant global topological differences.
+
+5. pathway_level_difference_analysis:
+   - Performs pathway-level testing using effect size and KS statistics on Betti numbers.
+   - Applies permutation-based empirical p-value estimation and multiple testing correction.
+   - Saves the resulting statistics to CSV files in the 'Results/' directory.
+
+Dependencies:
+-------------
+time, numpy, pandas, random, pickle, scipy.stats, statsmodels.stats.multitest
+
+Output:
+-------
+- Global difference summary (printed to console)
+- Pathway-level test results saved as:
+  'Results/Effect_size_KS_test_results_dimension_{top_dim}_{dist_type}_new.csv'
 """
 
-# ==========================
-# Imports
-# ==========================
-import os                  # Handling directory paths and creating folders
-import pickle              # Saving/loading Python objects (e.g., dictionaries, lists)
-import pandas as pd        # DataFrame operations for expression and KEGG data
-import numpy as np         # Numerical computations and array manipulations
-from tqdm import tqdm      # Progress bar for loops
-from utils import extract_adjacency_matrices, extract_pathway_expressions, compute_betti_numbers
-                          # Utility functions for GenPath-PPH workflow
+import time                     # Used to track or measure execution time of operations
+import numpy as np              # Numerical computations, array and matrix handling
+import pandas as pd             # For data handling and manipulation
+import random                   # Random sampling for permutation testing
+from scipy.stats import ks_2samp            # For performing the KS test
+from statsmodels.stats.multitest import multipletests  # Multiple testing correction (e.g., Benjamini–Hochberg)
+from persim.landscapes import average_approx, snap_pl  # Averaging and aligning (snapping) landscapes
 
-# ==========================
-# Load RNA-seq expression data
-# ==========================
-print("Loading and preparing expression data...", flush=True)
-df_tpm_rna_log2 = pd.read_csv('PBMC_RNASeq_PRNA739257_log2TPM_symbol.csv', header=0)
-df_tpm_rna_log2 = df_tpm_rna_log2.rename(columns={'Unnamed: 0': 'Symbol'})
-df_tpm_rna_log2 = df_tpm_rna_log2.set_index('Symbol')
-df_all = df_tpm_rna_log2
+def permutation_test(cpls, dpls, num_perms=1000, norm=1):
+    np.random.seed(0)
 
-# ==========================
-# Load KEGG mapping data
-# ==========================
-print("Loading and preparing KEGG mapping data...", flush=True)
-kegg_map = pd.read_csv('Genes_Map_KEGG_pathways.txt', delimiter='\t')
+    num_runs = len(cpls)
+    combined = cpls + dpls
 
-# ==========================
-# Load selected KEGG pathway IDs
-# ==========================
-print("Loading selected KEGG pathways...", flush=True)
-select_ids = [
-    'hsa00400', 'hsa00290', 'hsa00514', 'hsa00511', 'hsa00533', 'hsa00524', 'hsa03010', 'hsa03008', 'hsa03040',
-    'hsa03430', 'hsa03410', 'hsa03420', 'hsa03450', 'hsa03320', 'hsa03266', 'hsa03267', 'hsa03060', 'hsa03082',
-    'hsa03083', 'hsa03260', 'hsa03265', 'hsa03264', 'hsa03020', 'hsa03013', 'hsa03022', 'hsa03050', 'hsa02010',
-    'hsa01040', 'hsa03030', 'hsa04142', 'hsa04120', 'hsa04130', 'hsa04814', 'hsa04966', 'hsa04977', 'hsa04974',
-    'hsa04640', 'hsa04973', 'hsa04146', 'hsa04260', 'hsa04976', 'hsa04216', 'hsa04972', 'hsa03460', 'hsa04742',
-    'hsa04978', 'hsa04964', 'hsa00563', 'hsa04970', 'hsa00970', 'hsa00780', 'hsa04672', 'hsa03250', 'hsa00910',
-    'hsa04064', 'hsa04060', 'hsa00470', 'hsa04144', 'hsa04145', 'hsa03018', 'hsa04610', 'hsa04080', 'hsa04141',
-    'hsa03440', 'hsa04975', 'hsa04110', 'hsa04721', 'hsa04613', 'hsa04962', 'hsa04630', 'hsa00232', 'hsa04979',
-    'hsa04061', 'hsa00534', 'hsa04913', 'hsa00513', 'hsa04623', 'hsa04911', 'hsa04925', 'hsa04136', 'hsa03015',
-    'hsa04744', 'hsa04714', 'hsa04115', 'hsa04960', 'hsa04392', 'hsa00510', 'hsa04924', 'hsa00592', 'hsa00190',
-    'hsa00630', 'hsa00440', 'hsa04122', 'hsa04961', 'hsa04614', 'hsa04066', 'hsa00130', 'hsa00040', 'hsa04622',
-    'hsa04750', 'hsa04971', 'hsa04659', 'hsa04621', 'hsa04668', 'hsa04217', 'hsa00785', 'hsa00531', 'hsa00360',
-    'hsa00340', 'hsa00120', 'hsa00603', 'hsa04114', 'hsa04915', 'hsa04914', 'hsa00920', 'hsa00053', 'hsa04215',
-    'hsa04150', 'hsa00532', 'hsa04918', 'hsa00515', 'hsa00730', 'hsa04919', 'hsa04330', 'hsa04140', 'hsa04512',
-    'hsa00860', 'hsa00062', 'hsa00750', 'hsa04929', 'hsa04662', 'hsa04625', 'hsa00220', 'hsa04350', 'hsa04520',
-    'hsa04922', 'hsa04611', 'hsa04218', 'hsa04012', 'hsa04137', 'hsa04152', 'hsa04923', 'hsa04540', 'hsa04514',
-    'hsa04927', 'hsa00100', 'hsa04620', 'hsa00052', 'hsa04928', 'hsa04380', 'hsa04270', 'hsa04390', 'hsa00061',
-    'hsa04666', 'hsa00740', 'hsa04022', 'hsa04710', 'hsa04071', 'hsa04360', 'hsa00770', 'hsa00450', 'hsa04211',
-    'hsa04340', 'hsa04920', 'hsa04664', 'hsa00260', 'hsa04912', 'hsa00650', 'hsa00790', 'hsa04650', 'hsa04370',
-    'hsa04658', 'hsa04072', 'hsa04921', 'hsa04210', 'hsa04910', 'hsa04935', 'hsa00900', 'hsa04917', 'hsa04726',
-    'hsa00604', 'hsa00983', 'hsa04660', 'hsa00640', 'hsa04722', 'hsa00380', 'hsa00250', 'hsa00330', 'hsa04550',
-    'hsa04213', 'hsa00270', 'hsa00020', 'hsa04024', 'hsa04916', 'hsa00310', 'hsa04510', 'hsa04728', 'hsa00520',
-    'hsa00350', 'hsa04724', 'hsa04730', 'hsa04068', 'hsa04530', 'hsa00010', 'hsa04810', 'hsa00280', 'hsa00430',
-    'hsa04657', 'hsa04020', 'hsa04670', 'hsa04151', 'hsa04725', 'hsa04720', 'hsa00620', 'hsa00410', 'hsa00071',
-    'hsa04926', 'hsa00051', 'hsa00982', 'hsa00512', 'hsa04015', 'hsa04723', 'hsa04612', 'hsa04727', 'hsa04261',
-    'hsa00601', 'hsa00500', 'hsa00030', 'hsa04310', 'hsa04014', 'hsa00591', 'hsa04010', 'hsa04371', 'hsa04713',
-    'hsa04740', 'hsa00140', 'hsa00830', 'hsa00670', 'hsa04062', 'hsa00590', 'hsa00561', 'hsa00480', 'hsa00760',
-    'hsa00565', 'hsa00562', 'hsa00240', 'hsa00564', 'hsa00600', 'hsa00980', 'hsa04070', 'hsa00230'
-]
+    [c_sn, d_sn] = snap_pl([average_approx(cpls), average_approx(dpls)])
+    true_diff = (d_sn - c_sn)
+    true_diff_val = (
+        true_diff.p_norm(p=norm) if norm in [1, 2] else true_diff.sup_norm()
+    )
 
-# ==========================
-# Load gene conversion priority list
-# ==========================
-print("Loading gene conversion priority list...", flush=True)
-with open('kegg_genes_ids_to_symbols_priority_list.pkl', 'rb') as f:
-    priority_list = pickle.load(f)
-
-# ==========================
-# Extract adjacency matrices and pathway expressions
-# ==========================
-print("Extracting adjacency matrices and pathway expressions...", flush=True)
-adj_matrices = extract_adjacency_matrices(select_ids, kegg_map, df_all, priority_list)
-pathways_expressions = extract_pathway_expressions(select_ids, kegg_map, df_all, priority_list)
-
-# ==========================
-# Check consistency of dimensions
-# ==========================
-print("Checking adjacency matrix vs. expression dimensions...", flush=True)
-adj_length = [adj.shape[0] for adj in adj_matrices.values()]
-expression_length = [exp.shape[0] for exp in pathways_expressions.values()]
-if adj_length != expression_length:
-    raise ValueError("Mismatch: adjacency matrix and expression data lengths do not match!")
-
-# ==========================
-# Choose target dimensions to compute
-# ==========================
-target_dimensions = [0, 1]  # Example: compute 0-dim and 1-dim Betti numbers
-
-# ==========================
-# Compute Betti numbers for all pathways and dimensions
-# ==========================
-for dim in target_dimensions:
-    print(f"\nComputing Betti numbers for target dimension {dim}...", flush=True)
-    
-    # Use tqdm to show progress per pathway
-    betti_results_dim = {}
-    for pathway_id in tqdm(select_ids, desc=f"Dimension {dim}"):
-        result = compute_betti_numbers(
-            select_path_ids=[pathway_id],
-            adj_matrices=adj_matrices,
-            pathways_expressions=pathways_expressions,
-            target_dimension=dim,
-            filtration_scale=1,        # 1 for '1-abs-correlation', 2 for '1-correlation'
-            step_size=0.01,            # default for GenPath-PPH
-            save_betti_dir=None,       # saves in current directory if None
-            save_edges_dir=None
+    sig_count = 0
+    for i in range(num_perms):
+        # Print progress every 10 permutations
+        if (i + 1) % 100 == 0:
+            print(f"Permutation {i + 1}/{num_perms} completed (for {norm}-norm)")
+        
+        A_indices = random.sample(range(2 * num_runs), num_runs)
+        B_indices = [_ for _ in range(2*num_runs) if _ not in A_indices]
+        A = [combined[i] for i in A_indices]
+        B = [combined[j] for j in B_indices]
+        [A_sn, B_sn] = snap_pl([average_approx(A), average_approx(B)])
+        
+        random_diff = (B_sn - A_sn)
+        diff_val = (
+            random_diff.p_norm(p=norm) if norm in [1, 2] else random_diff.sup_norm()
         )
-        betti_results_dim[pathway_id] = result
+        if diff_val >= true_diff_val:
+            sig_count += 1
+    return true_diff_val, (sig_count / num_perms)
 
-print("\nDone computing Betti numbers for all selected KEGG pathways and dimensions.", flush=True)
+def pooled_std(control, disease):
+    n1, n2 = len(control), len(disease)
+    var1, var2 = np.var(control, ddof=1), np.var(disease, ddof=1)
+    return np.sqrt(((n1 - 1) * var1 + (n2 - 1) * var2) / (n1 + n2 - 2))
+    
+def permutation_test_effect_size(betti_control, betti_disease, num_permutations=1000, effect_type="cohen_d", seed=0):
+    """
+    Computes the effect size between Betti number distributions of control and disease, 
+    then performs a permutation test to estimate the empirical p-value.
 
+    Parameters:
+    - betti_control: np.array, Betti numbers for control group
+    - betti_disease: np.array, Betti numbers for disease group
+    - num_permutations: int, number of random permutations
+    - effect_type: str, type of effect size ("cohen_d" or "ks")
+
+    Returns:
+    - observed_effect: Observed effect size
+    - empirical_p: Proportion of permuted effect sizes more extreme than observed
+    """
+
+    np.random.seed(seed)  # Set the random seed for reproducibility
+        
+    # Compute observed effect size
+    if effect_type == "cohen_d":
+        # Skip empty arrays
+        if len(betti_control) == 0 or len(betti_disease) == 0:
+            observed_effect = np.nan
+
+        pooled_stdev = pooled_std(betti_control, betti_disease)
+        # Handle cases where pooled standard deviation is 0
+        mean_d = np.mean(betti_control) - np.mean(betti_disease)
+        if pooled_stdev == 0:
+            observed_effect = np.nan  # Use NaN instead of 0
+        else:
+            observed_effect = mean_d / pooled_stdev
+    
+    elif effect_type == "ks":
+        observed_effect = ks_2samp(betti_control, betti_disease).statistic
+
+    else:
+        raise ValueError("Invalid effect type. Choose 'cohen_d' or 'ks'.")
+
+    # Combine data and permute
+    combined = np.concatenate([betti_control, betti_disease])
+    permuted_effects = []
+
+    for _ in range(num_permutations):
+        np.random.shuffle(combined)
+        perm_control = combined[:len(betti_control)]
+        perm_disease = combined[len(betti_control):]
+
+        if effect_type == "cohen_d":
+            pooled_stdev_perm = pooled_std(perm_control, perm_disease)
+            d_perm = np.mean(perm_control) - np.mean(perm_disease)
+            perm_effect = d_perm / pooled_stdev_perm
+        else:
+            perm_effect = ks_2samp(perm_control, perm_disease).statistic
+            mean_d = np.nan
+
+        permuted_effects.append(perm_effect)
+
+    permuted_effects = np.array(permuted_effects)
+
+    # Compute empirical p-value
+    empirical_p = np.mean(np.abs(permuted_effects) >= np.abs(observed_effect))
+
+    return observed_effect, mean_d, empirical_p
+    
+def global_difference_analysis(cpls, dpls, num_perms=1000):
+    # Snap & compute averages
+    cpls_snap, dpls_snap = [], []
+    for cpl, dpl in zip(cpls, dpls):
+        try:
+            [c_sn, d_sn] = snap_pl([cpl, dpl])
+            cpls_snap.append(c_sn)
+            dpls_snap.append(d_sn)
+        except Exception:
+            pass
+            
+    # Run permutation test for 3 norms
+    norms = [1, 2, 'sup']
+    results_raw = [permutation_test(cpls_snap, dpls_snap, num_perms=num_perms, norm=n) for n in norms]
+    true_diff_vals, pvals = zip(*results_raw)
+    
+    # BH correction
+    reject, pvals_adj, _, _ = multipletests(pvals, method='fdr_bh')
+    results = dict(zip(norms, zip(pvals, pvals_adj, reject)))
+
+    # Display the global difference test results
+    print("\nGlobal difference analysis:")
+    for i, norm in enumerate(norms):
+        p_raw, p_adj, sig = results[norm]
+        diff_val = true_diff_vals[i]
+        print(f"Norm {norm}: measured difference={diff_val:.6f}, p={p_raw:.6f}, adj p={p_adj:.6f}, Significant={sig}")
+        if p_adj < 0.05:
+            print(f"{norm}-norm shows significant difference between control and disease groups\n")
+        else:
+            print(f"{norm}-norm did not show significant difference between control and disease groups\n")
+    
+    return results
+
+def pathway_level_difference_analysis(path_ids, dim0_betti_numbers_dict, dim1_betti_numbers_dict, top_dim=0, num_perm=5000, seed = 0):
+    start_time = time.time()
+    
+    dist_type = '1-abs-correlation' # Distance function used in GenPath-PPH
+
+    # Check top_dim and dist_type to select the appropriate dictionary
+    if top_dim == 0:
+        dim_betti_numbers_dict = dim0_betti_numbers_dict
+    elif top_dim == 1:
+        dim_betti_numbers_dict = dim1_betti_numbers_dict
+    else:
+        raise ValueError(f"Invalid entry for top_dim ({top_dim}).")
+
+    # Initialize lists for columns
+    dim_results_data = {
+        'path_id': [],
+        'mean_diff_observed': [],
+        'es_observed': [],
+        'es_raw_pvalue': [],
+        'es_corrected_pvalue': [],
+        'ks_observed': [],
+        'ks_raw_pvalue': [],
+        'ks_corrected_pvalue': []
+        }
+
+    # Loop over each path_id to perform KS test for full, cut_both_ends, and cut_tail_end
+    counter = 0
+    for path_id in path_ids:
+        counter += 1
+        print(f"Processing pathway {counter}/{len(path_ids)}: {path_id}...")
+
+        dim_results_data['path_id'].append(path_id)
+    
+        # Full Betti numbers
+        betti_control_full = dim_betti_numbers_dict[path_id]['control']
+        betti_disease_full = dim_betti_numbers_dict[path_id]['disease']
+        observed_diff_es, mean_d, raw_p_es = permutation_test_effect_size(betti_control_full, betti_disease_full, num_permutations=num_perm, effect_type="cohen_d", seed=seed)
+        observed_diff_ks, _, raw_p_ks = permutation_test_effect_size(betti_control_full, betti_disease_full, num_permutations=num_perm, effect_type="ks", seed=seed)
+        dim_results_data['mean_diff_observed'].append(mean_d)
+        dim_results_data['es_observed'].append(observed_diff_es)
+        dim_results_data['es_raw_pvalue'].append(raw_p_es)
+        dim_results_data['ks_observed'].append(observed_diff_ks)
+        dim_results_data['ks_raw_pvalue'].append(raw_p_ks)
+
+    # Apply Benjamini-Hochberg correction on raw p-values for each group
+    _, es_corrected_pvalues, _, _ = multipletests(dim_results_data['es_raw_pvalue'], method='fdr_bh')
+    _, ks_corrected_pvalues, _, _ = multipletests(dim_results_data['ks_raw_pvalue'], method='fdr_bh')
+
+    # Store the corrected p-values
+    dim_results_data['es_corrected_pvalue'] = es_corrected_pvalues
+    dim_results_data['ks_corrected_pvalue'] = ks_corrected_pvalues
+
+    # Convert the results to a dataframe
+    dim_df_results = pd.DataFrame(dim_results_data)
+
+    # save the resulting dataframe
+    dim_df_results.to_csv(f"Results/Effect_size_KS_test_results_dimension_{top_dim}_{dist_type}_new.csv", index=False)
+
+    print(f"KS test run for {time.time() - start_time} secs.")
+    
