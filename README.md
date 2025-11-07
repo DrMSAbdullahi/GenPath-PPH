@@ -217,7 +217,7 @@ Running the above will:
 - Compute persistent path homology on a toy graph.
 - Print Betti numbers for each dimension across the filtration.
 
-**2. Example for real pathways** - Demononstrates PPH computation for real biological pathways (p53 signaling pathway and ferroptosis):
+**2. Example for real pathways** - Demonstrates PPH computation for real biological pathways (p53 signaling pathway and ferroptosis):
 
 ```bash
 python examples/p53_signaling.py
