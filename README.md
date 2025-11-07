@@ -169,13 +169,41 @@ pip install -r requirements.txt
 ### Import the package in Python
 
 ```python
-from genpath_pph import core, utils
+# ------------------------
+# Example usage with your core functions
+# ------------------------
+from core import GenPathHomology, PathwayDataProcessor
+import numpy as np
 
-# Example: generate allowed paths
-paths = utils.generate_allowed_paths(network, max_length=2)
+# Suppose you have a toy adjacency matrix for a pathway
+adj_matrix = np.array([
+    [0, 1, 0],
+    [0, 0, 1],
+    [1, 0, 0]
+])
 
-# Example: compute boundaries
-boundaries = core.compute_boundaries(paths)
+# Example edges extracted from adjacency matrix
+rows, cols = np.nonzero(adj_matrix)
+edges = np.column_stack((rows, cols))
+
+# Simulated gene expression for 3 genes, 4 samples
+expression_data = np.random.rand(3, 4)
+
+# Initialize PPH object
+pph = GenPathHomology()
+
+# Generate allowed paths (dimension 2)
+allowed_paths = pph.utils_generate_allowed_paths(edges, max_path=2)
+
+# Compute boundaries
+boundary_matrices, ranks, path_idx_flags = pph.utils_unlimited_boundary_operator(allowed_paths, max_path=2)
+
+# Compute Betti numbers for connected digraph
+betti_numbers = pph.path_homology_for_connected_digraph(allowed_paths, max_path=2)
+
+print("Allowed paths:", allowed_paths)
+print("Boundary matrices:", boundary_matrices)
+print("Betti numbers:", betti_numbers)
 ```
 
 ### Run some examples
