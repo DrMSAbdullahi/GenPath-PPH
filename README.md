@@ -169,9 +169,6 @@ pip install -r requirements.txt
 ### Import the package in Python
 
 ```python
-# ------------------------
-# Example usage with your core functions
-# ------------------------
 from core import GenPathHomology, PathwayDataProcessor
 import numpy as np
 
@@ -201,6 +198,7 @@ boundary_matrices, ranks, path_idx_flags = pph.utils_unlimited_boundary_operator
 # Compute Betti numbers for connected digraph
 betti_numbers = pph.path_homology_for_connected_digraph(allowed_paths, max_path=2)
 
+# Print the results
 print("Allowed paths:", allowed_paths)
 print("Boundary matrices:", boundary_matrices)
 print("Betti numbers:", betti_numbers)
@@ -259,7 +257,7 @@ GenPath-PPH/
 │   ├── toy_example_ph_vs_pph.ipynb     # Compare PH vs PPH on toy data
 │   ├── genpath_pph_global.ipynb        # Global difference analysis on HCC data
 │   └── genpath_pph_pathway_level.ipynb # Pathway-level analysis on HCC data
-└── tests/                  # Optional unit tests
+└── data/                  # Datasets used/created
 ```
 
 ---
