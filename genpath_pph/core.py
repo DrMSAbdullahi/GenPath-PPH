@@ -665,7 +665,7 @@ class GenPathHomology(object):
         betti_results = {'control': {}, 'disease': {}}
     
         for idx, item in enumerate(select_path_ids, 1):
-            print(f"Processing pathway {idx}/{len(select_path_ids)}: {item}...", flush=True)
+            print(f"Processing pathway {idx}/{len(select_path_ids)}: {item} (Dimension {target_dimension})...", flush=True)
             pathway = pathways_expressions[item]
         
             # Split control and disease

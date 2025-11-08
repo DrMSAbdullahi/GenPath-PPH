@@ -16,6 +16,7 @@ Functions:
 # ==========================
 import os                  # Handling directory paths and creating folders
 import numpy as np         # Numerical computations and array manipulations
+import pandas as pd          # DataFrame operations for gene expression and adjacency matrices
 import matplotlib.pyplot as plt      # Visualization of persistence landscapes and results
 from core import PathwayDataProcessor, GenPathHomology
                         # Core classes for pathway processing and persistent path homology computation
@@ -229,12 +230,6 @@ def perform_ks_and_effectsize_tests(betti_dict, path_ids, num_permutations=5000,
     _, results['ks_corrected_pvalue'], _, _ = multipletests(results['ks_raw_pvalue'], method='fdr_bh')
 
     return pd.DataFrame(results)
-
-# Function to compute pooled standard deviation
-def pooled_std(control, disease):
-    n1, n2 = len(control), len(disease)
-    var1, var2 = np.var(control, ddof=1), np.var(disease, ddof=1)
-    return np.sqrt(((n1 - 1) * var1 + (n2 - 1) * var2) / (n1 + n2 - 2))
     
 def permutation_test_effect_size(betti_control, betti_disease, num_permutations=1000, effect_type="cohen_d", seed=0):
     """
