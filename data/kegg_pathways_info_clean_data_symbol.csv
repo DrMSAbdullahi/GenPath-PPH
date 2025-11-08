@@ -1,0 +1,252 @@
+PathwayID,Description,No of genes,Available genes,Percentage present
+hsa00010,Glycolysis / Gluconeogenesis,67,53,79.1
+hsa00020,Citrate cycle (TCA cycle),30,27,90.0
+hsa00030,Pentose phosphate pathway,30,25,83.33
+hsa00040,Pentose and glucuronate interconversions,36,16,44.44
+hsa00051,Fructose and mannose metabolism,34,29,85.29
+hsa00052,Galactose metabolism,32,25,78.12
+hsa00053,Ascorbate and aldarate metabolism,30,13,43.33
+hsa00500,Starch and sucrose metabolism,36,24,66.67
+hsa00520,Amino sugar and nucleotide sugar metabolism,49,45,91.84
+hsa00620,Pyruvate metabolism,47,39,82.98
+hsa00630,Glyoxylate and dicarboxylate metabolism,30,25,83.33
+hsa00640,Propanoate metabolism,32,31,96.88
+hsa00650,Butanoate metabolism,27,19,70.37
+hsa00562,Inositol phosphate metabolism,73,70,95.89
+hsa00190,Oxidative phosphorylation,134,111,82.84
+hsa00910,Nitrogen metabolism,17,14,82.35
+hsa00920,Sulfur metabolism,10,9,90.0
+hsa00061,Fatty acid biosynthesis,18,17,94.44
+hsa00062,Fatty acid elongation,27,27,100.0
+hsa00071,Fatty acid degradation,43,39,90.7
+hsa00100,Steroid biosynthesis,20,20,100.0
+hsa00120,Primary bile acid biosynthesis,17,13,76.47
+hsa00140,Steroid hormone biosynthesis,62,34,54.84
+hsa00561,Glycerolipid metabolism,63,50,79.37
+hsa00564,Glycerophospholipid metabolism,99,83,83.84
+hsa00565,Ether lipid metabolism,50,36,72.0
+hsa00600,Sphingolipid metabolism,53,47,88.68
+hsa00590,Arachidonic acid metabolism,61,44,72.13
+hsa00591,Linoleic acid metabolism,30,16,53.33
+hsa00592,alpha-Linolenic acid metabolism,26,15,57.69
+hsa01040,Biosynthesis of unsaturated fatty acids,27,27,100.0
+hsa00230,Purine metabolism,128,106,82.81
+hsa00240,Pyrimidine metabolism,58,56,96.55
+hsa00250,"Alanine, aspartate and glutamate metabolism",37,27,72.97
+hsa00260,"Glycine, serine and threonine metabolism",40,35,87.5
+hsa00270,Cysteine and methionine metabolism,52,46,88.46
+hsa00280,"Valine, leucine and isoleucine degradation",48,45,93.75
+hsa00290,"Valine, leucine and isoleucine biosynthesis",4,4,100.0
+hsa00310,Lysine degradation,63,58,92.06
+hsa00220,Arginine biosynthesis,22,17,77.27
+hsa00330,Arginine and proline metabolism,50,42,84.0
+hsa00340,Histidine metabolism,22,19,86.36
+hsa00350,Tyrosine metabolism,36,26,72.22
+hsa00360,Phenylalanine metabolism,16,11,68.75
+hsa00380,Tryptophan metabolism,42,36,85.71
+hsa00400,"Phenylalanine, tyrosine and tryptophan biosynthesis",6,3,50.0
+hsa00410,beta-Alanine metabolism,31,27,87.1
+hsa00430,Taurine and hypotaurine metabolism,16,11,68.75
+hsa00440,Phosphonate and phosphinate metabolism,6,6,100.0
+hsa00450,Selenocompound metabolism,17,16,94.12
+hsa00470,D-Amino acid metabolism,6,5,83.33
+hsa00480,Glutathione metabolism,57,47,82.46
+hsa00510,N-Glycan biosynthesis,53,50,94.34
+hsa00513,Various types of N-glycan biosynthesis,42,39,92.86
+hsa00512,Mucin type O-glycan biosynthesis,36,32,88.89
+hsa00515,Mannose type O-glycan biosynthesis,23,20,86.96
+hsa00514,Other types of O-glycan biosynthesis,47,44,93.62
+hsa00532,Glycosaminoglycan biosynthesis - chondroitin sulfate / dermatan sulfate,21,20,95.24
+hsa00534,Glycosaminoglycan biosynthesis - heparan sulfate / heparin,24,20,83.33
+hsa00533,Glycosaminoglycan biosynthesis - keratan sulfate,14,14,100.0
+hsa00531,Glycosaminoglycan degradation,19,17,89.47
+hsa00563,Glycosylphosphatidylinositol (GPI)-anchor biosynthesis,26,25,96.15
+hsa00601,Glycosphingolipid biosynthesis - lacto and neolacto series,28,21,75.0
+hsa00603,Glycosphingolipid biosynthesis - globo and isoglobo series,16,13,81.25
+hsa00604,Glycosphingolipid biosynthesis - ganglio series,15,14,93.33
+hsa00511,Other glycan degradation,18,16,88.89
+hsa00730,Thiamine metabolism,15,12,80.0
+hsa00740,Riboflavin metabolism,8,8,100.0
+hsa00750,Vitamin B6 metabolism,6,6,100.0
+hsa00760,Nicotinate and nicotinamide metabolism,37,35,94.59
+hsa00770,Pantothenate and CoA biosynthesis,21,20,95.24
+hsa00780,Biotin metabolism,3,3,100.0
+hsa00785,Lipoic acid metabolism,19,17,89.47
+hsa00790,Folate biosynthesis,27,19,70.37
+hsa00670,One carbon pool by folate,20,18,90.0
+hsa00830,Retinol metabolism,68,35,51.47
+hsa00860,Porphyrin metabolism,43,26,60.47
+hsa00130,Ubiquinone and other terpenoid-quinone biosynthesis,11,10,90.91
+hsa00900,Terpenoid backbone biosynthesis,23,21,91.3
+hsa00232,Caffeine metabolism,6,3,50.0
+hsa00524,"Neomycin, kanamycin and gentamicin biosynthesis",5,4,80.0
+hsa00980,Metabolism of xenobiotics by cytochrome P450,78,44,56.41
+hsa00982,Drug metabolism - cytochrome P450,72,39,54.17
+hsa00983,Drug metabolism - other enzymes,80,55,68.75
+hsa03020,RNA polymerase,34,32,94.12
+hsa03022,Basal transcription factors,45,39,86.67
+hsa03040,Spliceosome,216,145,67.13
+hsa03010,Ribosome,167,133,79.64
+hsa00970,Aminoacyl-tRNA biosynthesis,66,25,37.88
+hsa03013,Nucleocytoplasmic transport,108,103,95.37
+hsa03015,mRNA surveillance pathway,97,88,90.72
+hsa03008,Ribosome biogenesis in eukaryotes,164,84,51.22
+hsa03060,Protein export,23,23,100.0
+hsa04141,Protein processing in endoplasmic reticulum,170,159,93.53
+hsa04130,SNARE interactions in vesicular transport,33,33,100.0
+hsa04120,Ubiquitin mediated proteolysis,142,138,97.18
+hsa04122,Sulfur relay system,8,8,100.0
+hsa03050,Proteasome,46,46,100.0
+hsa03018,RNA degradation,79,70,88.61
+hsa03030,DNA replication,36,36,100.0
+hsa03410,Base excision repair,44,43,97.73
+hsa03420,Nucleotide excision repair,63,61,96.83
+hsa03430,Mismatch repair,23,23,100.0
+hsa03440,Homologous recombination,41,41,100.0
+hsa03450,Non-homologous end-joining,13,13,100.0
+hsa03460,Fanconi anemia pathway,55,52,94.55
+hsa03082,ATP-dependent chromatin remodeling,117,89,76.07
+hsa03083,Polycomb repressive complex,84,83,98.81
+hsa03250,Viral life cycle - HIV-1,63,62,98.41
+hsa03260,Virion - Human immunodeficiency virus,5,4,80.0
+hsa03264,Virion - Flavivirus,4,2,50.0
+hsa03265,Virion - Lyssavirus,4,2,50.0
+hsa03266,Virion - Herpesvirus,9,9,100.0
+hsa03267,Virion - Adenovirus,4,4,100.0
+hsa02010,ABC transporters,45,36,80.0
+hsa04010,MAPK signaling pathway,301,259,86.05
+hsa04012,ErbB signaling pathway,85,77,90.59
+hsa04014,Ras signaling pathway,236,191,80.93
+hsa04015,Rap1 signaling pathway,210,180,85.71
+hsa04310,Wnt signaling pathway,174,148,85.06
+hsa04330,Notch signaling pathway,62,54,87.1
+hsa04340,Hedgehog signaling pathway,56,52,92.86
+hsa04350,TGF-beta signaling pathway,108,88,81.48
+hsa04390,Hippo signaling pathway,157,132,84.08
+hsa04392,Hippo signaling pathway - multiple species,29,26,89.66
+hsa04370,VEGF signaling pathway,59,53,89.83
+hsa04371,Apelin signaling pathway,139,116,83.45
+hsa04630,JAK-STAT signaling pathway,166,128,77.11
+hsa04064,NF-kappa B signaling pathway,104,96,92.31
+hsa04668,TNF signaling pathway,114,108,94.74
+hsa04066,HIF-1 signaling pathway,109,99,90.83
+hsa04068,FoxO signaling pathway,131,119,90.84
+hsa04020,Calcium signaling pathway,253,184,72.73
+hsa04070,Phosphatidylinositol signaling system,97,90,92.78
+hsa04072,Phospholipase D signaling pathway,148,129,87.16
+hsa04071,Sphingolipid signaling pathway,121,116,95.87
+hsa04024,cAMP signaling pathway,225,167,74.22
+hsa04022,cGMP-PKG signaling pathway,167,135,80.84
+hsa04151,PI3K-Akt signaling pathway,359,285,79.39
+hsa04152,AMPK signaling pathway,121,107,88.43
+hsa04150,mTOR signaling pathway,156,144,92.31
+hsa04080,Neuroactive ligand-receptor interaction,367,197,53.68
+hsa04060,Cytokine-cytokine receptor interaction,297,208,70.03
+hsa04061,Viral protein interaction with cytokine and cytokine receptor,100,74,74.0
+hsa04512,ECM-receptor interaction,89,71,79.78
+hsa04514,Cell adhesion molecules,158,129,81.65
+hsa04144,Endocytosis,250,244,97.6
+hsa04145,Phagosome,152,136,89.47
+hsa04142,Lysosome,132,124,93.94
+hsa04146,Peroxisome,83,77,92.77
+hsa04140,Autophagy - animal,141,135,95.74
+hsa04136,Autophagy - other,32,31,96.88
+hsa04137,Mitophagy - animal,72,70,97.22
+hsa04110,Cell cycle,157,156,99.36
+hsa04114,Oocyte meiosis,131,118,90.08
+hsa04210,Apoptosis,136,129,94.85
+hsa04215,Apoptosis - multiple species,32,31,96.88
+hsa04216,Ferroptosis,41,39,95.12
+hsa04217,Necroptosis,159,111,69.81
+hsa04115,p53 signaling pathway,74,72,97.3
+hsa04218,Cellular senescence,156,151,96.79
+hsa04510,Focal adhesion,203,177,87.19
+hsa04520,Adherens junction,93,85,91.4
+hsa04530,Tight junction,170,142,83.53
+hsa04540,Gap junction,88,73,82.95
+hsa04550,Signaling pathways regulating pluripotency of stem cells,143,115,80.42
+hsa04814,Motor proteins,193,160,82.9
+hsa04810,Regulation of actin cytoskeleton,229,191,83.41
+hsa04640,Hematopoietic cell lineage,99,91,91.92
+hsa04610,Complement and coagulation cascades,86,64,74.42
+hsa04611,Platelet activation,124,110,88.71
+hsa04613,Neutrophil extracellular trap formation,191,104,54.45
+hsa04620,Toll-like receptor signaling pathway,104,86,82.69
+hsa04621,NOD-like receptor signaling pathway,186,156,83.87
+hsa04622,RIG-I-like receptor signaling pathway,71,53,74.65
+hsa04623,Cytosolic DNA-sensing pathway,75,56,74.67
+hsa04625,C-type lectin receptor signaling pathway,104,97,93.27
+hsa04650,Natural killer cell mediated cytotoxicity,132,103,78.03
+hsa04612,Antigen processing and presentation,78,69,88.46
+hsa04660,T cell receptor signaling pathway,121,116,95.87
+hsa04658,Th1 and Th2 cell differentiation,92,85,92.39
+hsa04659,Th17 cell differentiation,108,100,92.59
+hsa04657,IL-17 signaling pathway,94,78,82.98
+hsa04662,B cell receptor signaling pathway,84,80,95.24
+hsa04664,Fc epsilon RI signaling pathway,68,61,89.71
+hsa04666,Fc gamma R-mediated phagocytosis,97,92,94.85
+hsa04670,Leukocyte transendothelial migration,115,97,84.35
+hsa04672,Intestinal immune network for IgA production,49,40,81.63
+hsa04062,Chemokine signaling pathway,192,161,83.85
+hsa04911,Insulin secretion,86,60,69.77
+hsa04910,Insulin signaling pathway,137,120,87.59
+hsa04922,Glucagon signaling pathway,107,86,80.37
+hsa04923,Regulation of lipolysis in adipocytes,58,43,74.14
+hsa04920,Adipocytokine signaling pathway,69,61,88.41
+hsa03320,PPAR signaling pathway,75,57,76.0
+hsa04929,GnRH secretion,64,52,81.25
+hsa04912,GnRH signaling pathway,93,79,84.95
+hsa04913,Ovarian steroidogenesis,51,35,68.63
+hsa04915,Estrogen signaling pathway,137,96,70.07
+hsa04914,Progesterone-mediated oocyte maturation,102,94,92.16
+hsa04917,Prolactin signaling pathway,70,61,87.14
+hsa04921,Oxytocin signaling pathway,154,127,82.47
+hsa04926,Relaxin signaling pathway,129,113,87.6
+hsa04935,"Growth hormone synthesis, secretion and action",120,105,87.5
+hsa04918,Thyroid hormone synthesis,75,60,80.0
+hsa04919,Thyroid hormone signaling pathway,121,109,90.08
+hsa04928,"Parathyroid hormone synthesis, secretion and action",106,88,83.02
+hsa04916,Melanogenesis,101,86,85.15
+hsa04924,Renin secretion,69,51,73.91
+hsa04614,Renin-angiotensin system,23,15,65.22
+hsa04925,Aldosterone synthesis and secretion,98,75,76.53
+hsa04927,Cortisol synthesis and secretion,65,49,75.38
+hsa04260,Cardiac muscle contraction,87,61,70.11
+hsa04261,Adrenergic signaling in cardiomyocytes,154,121,78.57
+hsa04270,Vascular smooth muscle contraction,134,101,75.37
+hsa04970,Salivary secretion,93,66,70.97
+hsa04971,Gastric acid secretion,76,58,76.32
+hsa04972,Pancreatic secretion,102,70,68.63
+hsa04976,Bile secretion,89,51,57.3
+hsa04973,Carbohydrate digestion and absorption,47,34,72.34
+hsa04974,Protein digestion and absorption,103,76,73.79
+hsa04975,Fat digestion and absorption,43,24,55.81
+hsa04979,Cholesterol metabolism,51,37,72.55
+hsa04977,Vitamin digestion and absorption,24,15,62.5
+hsa04978,Mineral absorption,60,46,76.67
+hsa04962,Vasopressin-regulated water reabsorption,44,40,90.91
+hsa04960,Aldosterone-regulated sodium reabsorption,37,30,81.08
+hsa04961,Endocrine and other factor-regulated calcium reabsorption,53,45,84.91
+hsa04964,Proximal tubule bicarbonate reclamation,23,19,82.61
+hsa04966,Collecting duct acid secretion,27,22,81.48
+hsa04724,Glutamatergic synapse,115,90,78.26
+hsa04727,GABAergic synapse,89,58,65.17
+hsa04725,Cholinergic synapse,113,91,80.53
+hsa04728,Dopaminergic synapse,132,108,81.82
+hsa04726,Serotonergic synapse,115,83,72.17
+hsa04720,Long-term potentiation,67,55,82.09
+hsa04730,Long-term depression,60,49,81.67
+hsa04723,Retrograde endocannabinoid signaling,148,106,71.62
+hsa04721,Synaptic vesicle cycle,78,56,71.79
+hsa04722,Neurotrophin signaling pathway,119,110,92.44
+hsa04744,Phototransduction,29,17,58.62
+hsa04740,Olfactory transduction,439,97,22.1
+hsa04742,Taste transduction,86,51,59.3
+hsa04750,Inflammatory mediator regulation of TRP channels,98,80,81.63
+hsa04360,Axon guidance,182,158,86.81
+hsa04380,Osteoclast differentiation,128,124,96.88
+hsa04211,Longevity regulating pathway,89,81,91.01
+hsa04213,Longevity regulating pathway - multiple species,61,53,86.89
+hsa04710,Circadian rhythm,34,31,91.18
+hsa04713,Circadian entrainment,97,73,75.26
+hsa04714,Thermogenesis,232,203,87.5
