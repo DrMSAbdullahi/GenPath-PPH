@@ -5,24 +5,14 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "genpath-pph"
 version = "1.0.0"
-description = "GenPath-PPH: Gene expression and KEGG pathway network integration using Persistent Path Homology for disease pathway analysis"
+description = "GenPath-PPH: Gene expression and KEGG pathway network integration using Persistent Path Homology"
 readme = "README.md"
-readme-content-type = "text/markdown"     # ← Added (recommended)
+readme-content-type = "text/markdown"
 license = { file = "LICENSE.txt" }
 authors = [
     { name = "Muhammad Sirajo Abdullahi", email = "abdullahi.sirajo@udusok.edu.ng" }
 ]
-keywords = [
-    "persistent-path-homology",
-    "pathway-analysis",
-    "topological-data-analysis",
-    "bioinformatics",
-    "hepatocellular-carcinoma",
-    "gene-expression",
-    "betti-numbers",
-    "KEGG",
-    "TDA"
-]
+keywords = ["persistent-path-homology", "TDA", "pathway-analysis", "bioinformatics", "KEGG"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
@@ -31,8 +21,6 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Topic :: Scientific/Engineering :: Bio-Informatics",
-    "Topic :: Scientific/Engineering :: Mathematics",
-    "Intended Audience :: Science/Research",
     "Development Status :: 4 - Beta",
 ]
 requires-python = ">=3.10"
@@ -43,20 +31,17 @@ dependencies = [
     "networkx>=3.0",
     "matplotlib>=3.4",
     "seaborn>=0.11",
-    "biopython>=1.76",
     "statsmodels>=0.13",
 ]
 
 [project.optional-dependencies]
-full = ["gudhi>=3.8", "gseapy>=1.1", "persim>=0.2.1"]
-dev = ["build", "twine", "pytest", "jupyter", "black", "isort"]
+full = ["gudhi>=3.8", "persim>=0.2.1"]
+dev = ["build", "twine", "pytest"]
 
 [project.urls]
 Homepage = "https://github.com/DrMSAbdullahi/GenPath-PPH"
 Repository = "https://github.com/DrMSAbdullahi/GenPath-PPH"
-"Paper (CSBJ)" = "https://doi.org/10.1016/j.csbj.2025.11.018"
-Issues = "https://github.com/DrMSAbdullahi/GenPath-PPH/issues"
-Documentation = "https://github.com/DrMSAbdullahi/GenPath-PPH#readme"
+"Paper" = "https://doi.org/10.1016/j.csbj.2025.11.018"
 
 [tool.setuptools.packages.find]
 where = ["."]
