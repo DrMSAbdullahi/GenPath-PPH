@@ -125,7 +125,7 @@ def permutation_test_effect_size(betti_control, betti_disease, num_permutations=
         betti_control: np.array, Betti numbers for the control group
         betti_disease: np.array, Betti numbers for the disease group
         num_permutations: int, number of random permutations (default=1000)
-        effect_type: str, 'cohen_d' for effect size or 'ks' for Kolmogorov-Smirnov test
+        effect_type: str, 'cohen_d' for effect size or 'ks' for Kolmogorov-Smirnov test (default=ks)
         seed: int, random seed for reproducibility (default=0)
 
     Returns:
@@ -230,70 +230,6 @@ def perform_ks_and_effectsize_tests(betti_dict, path_ids, num_permutations=5000,
     _, results['ks_corrected_pvalue'], _, _ = multipletests(results['ks_raw_pvalue'], method='fdr_bh')
 
     return pd.DataFrame(results)
-    
-def permutation_test_effect_size(betti_control, betti_disease, num_permutations=1000, effect_type="cohen_d", seed=0):
-    """
-    Computes the effect size between Betti number distributions of control and disease, 
-    then performs a permutation test to estimate the empirical p-value.
-
-    Parameters:
-    - betti_control: np.array, Betti numbers for control group
-    - betti_disease: np.array, Betti numbers for disease group
-    - num_permutations: int, number of random permutations
-    - effect_type: str, type of effect size ("cohen_d" or "ks")
-
-    Returns:
-    - observed_effect: Observed effect size
-    - empirical_p: Proportion of permuted effect sizes more extreme than observed
-    """
-
-    np.random.seed(seed)  # Set the random seed for reproducibility
-        
-    # Compute observed effect size
-    if effect_type == "cohen_d":
-        # Skip empty arrays
-        if len(betti_control) == 0 or len(betti_disease) == 0:
-            observed_effect = np.nan
-
-        pooled_stdev = pooled_std(betti_control, betti_disease)
-        # Handle cases where pooled standard deviation is 0
-        mean_d = np.mean(betti_control) - np.mean(betti_disease)
-        if pooled_stdev == 0:
-            observed_effect = np.nan  # Use NaN instead of 0
-        else:
-            observed_effect = mean_d / pooled_stdev
-    
-    elif effect_type == "ks":
-        observed_effect = ks_2samp(betti_control, betti_disease).statistic
-
-    else:
-        raise ValueError("Invalid effect type. Choose 'cohen_d' or 'ks'.")
-
-    # Combine data and permute
-    combined = np.concatenate([betti_control, betti_disease])
-    permuted_effects = []
-
-    for _ in range(num_permutations):
-        np.random.shuffle(combined)
-        perm_control = combined[:len(betti_control)]
-        perm_disease = combined[len(betti_control):]
-
-        if effect_type == "cohen_d":
-            pooled_stdev_perm = pooled_std(perm_control, perm_disease)
-            d_perm = np.mean(perm_control) - np.mean(perm_disease)
-            perm_effect = d_perm / pooled_stdev_perm
-        else:
-            perm_effect = ks_2samp(perm_control, perm_disease).statistic
-            mean_d = np.nan
-
-        permuted_effects.append(perm_effect)
-
-    permuted_effects = np.array(permuted_effects)
-
-    # Compute empirical p-value
-    empirical_p = np.mean(np.abs(permuted_effects) >= np.abs(observed_effect))
-
-    return observed_effect, mean_d, empirical_p
 
 # -------------------
 # Homology
