@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "genpath-pph"
+version = "1.0.0"
+description = "Gene expression and KEGG pathway network integration using Persistent Path Homology"
+readme = "README.md"
+license = { file = "LICENSE.txt" }
+authors = [
+    { name = "Muhammad Sirajo Abdullahi", email = "abdullahi.sirajo@udusok.edu.ng" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24",
+    "scipy>=1.14",
+    "pandas>=1.5",
+    "persim>=0.2.1",
+    "statsmodels>=0.13",
+    "matplotlib>=3.4",
+    "seaborn>=0.11",
+    "biopython>=1.76",
+]
+
+[project.urls]
+Homepage   = "https://github.com/DrMSAbdullahi/GenPath-PPH"
+Repository = "https://github.com/DrMSAbdullahi/GenPath-PPH"
+Paper      = "https://doi.org/10.1016/j.csbj.2025.11.018"
+
+[tool.setuptools.packages.find]
+where   = ["."]
+include = ["genpath_pph*"]
