@@ -703,7 +703,51 @@ class GenPathHomology(object):
                     pickle.dump(edges_d, f)
 
         return betti_results
+
+def load_toy_data():
+    """
+    Returns a small simulated gene expression dataset for testing GenPath-PPH.
     
+    Returns
+    -------
+    expression_df : pd.DataFrame, shape (10 genes, 6 samples)
+        3 control samples (C1, C2, C3) and 3 disease samples (D1, D2, D3)
+    edges : np.ndarray, shape (9, 2)
+        Toy directed edges representing a small pathway graph
+    filtration : np.ndarray
+        Default filtration values from 0 to 1 in steps of 0.01
+    """
+    import pandas as pd
+    import numpy as np
+
+    genes   = [f"g{i}" for i in range(1, 11)]
+    samples = ["C1", "C2", "C3", "D1", "D2", "D3"]
+
+    data = np.array([
+        [3.224085, 4.238909, 3.573100, 2.281019, 2.904727, 3.252311],
+        [2.801195, 3.629210, 3.212241, 2.832321, 3.747732, 2.882458],
+        [4.568956, 3.268862, 3.689043, 2.781017, 3.834468, 3.507576],
+        [3.531844, 2.599495, 2.618524, 3.107632, 3.402103, 4.700751],
+        [4.695837, 4.608166, 4.677947, 3.766694, 1.826884, 4.893230],
+        [4.001411, 4.770909, 4.668929, 2.451091, 4.178800, 2.988391],
+        [4.279513, 4.427967, 5.506402, 2.991138, 3.061895, 2.712762],
+        [4.223187, 3.225830, 4.907987, 2.766738, 2.861530, 2.355171],
+        [3.765850, 3.609896, 4.185733, 1.280467, 1.476483, 2.873749],
+        [4.121385, 4.167441, 2.948542, 1.734737, 3.004740, 3.177959],
+    ])
+
+    expression_df = pd.DataFrame(data, index=genes, columns=samples)
+
+    edges = np.array([
+        [0,1],[1,2],[2,3],[3,0],
+        [5,6],[5,7],[8,6],[8,7],
+        [4,1]
+    ])
+
+    filtration = np.arange(0, 1, 0.01)
+
+    return expression_df, edges, filtration
+	
 # ----------------------------------------
 # Demo/test block to test PPH on a toy datasaet
 # ----------------------------------------
