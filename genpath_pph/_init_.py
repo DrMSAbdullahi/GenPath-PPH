@@ -35,11 +35,11 @@ Quick start
     result = model.test()
 
     # Low-level (original classes, unchanged)
-    from genpath_pph import GenPathHomology, PathwayDataProcessor
+    from genpath_pph import GenPathHomology, PathwayDataProcessor, load_toy_data
 """
 
 # ── Core classes (unchanged from original implementation) ─────────────────────
-from .core import GenPathHomology, PathwayDataProcessor
+from .core import GenPathHomology, PathwayDataProcessor, load_toy_data
 
 # ── Utility functions (unchanged) ─────────────────────────────────────────────
 from .utils import (
@@ -68,7 +68,7 @@ from .api import (
     PathwayResult,      # Result dataclass
 )
 
-__version__ = "1.0.0"
+__version__ = "1.0.2"
 __author__  = "Muhammad Sirajo Abdullahi"
 __email__   = "abdullahi.sirajo@udusok.edu.ng"
 
