@@ -3,7 +3,7 @@ name: Publish to PyPI
 on:
   release:
     types: [published]   # Trigger when you create a GitHub Release
-
+  workflow_dispatch:
 jobs:
   publish:
     runs-on: ubuntu-latest
