@@ -1,6 +1,6 @@
 # GenPath-PPH: Gene ExpressioN and PATHway network integration using Persistent Path Homology
 
-This repository contains the code and supplementary material for the manuscript:
+This repository contains the code and supplementary material for the research article:
 Abdullahi et al., "GenPath-PPH: Integrating Gene Expression and Pathway Networks via Persistent Path Homology Enhances Detection of Disease-Relevant Pathways", *Computational and Structural Biotechnology Journal*, 27, 5348-5362, 2025. https://doi.org/10.1016/j.csbj.2025.11.018
 
 ---
@@ -57,7 +57,7 @@ The output comprises two sets of Betti numbers (for **HCC** and **Control**), de
 
 ### 3. **Statistical Significance**
 
-#### a. **Global Differences**:
+- #### a. **Global Differences**:
 Persistence landscapes (PLs) were obtained for each pathway output from the PPH computation. The average landscape was then computed for each group (**HCC** and **Control**). The difference between these average landscapes was quantified using the supremum norm ($\|\cdot\|$∞) and the $L_{1,2}$-norm, and the statistical significance of these differences was evaluated through permutation testing.
 
 #### b. **Pathway-Level Differences**:
@@ -157,14 +157,14 @@ pip install genpath-pph
 ```
 
 ### Option 2 — Install from source
-# Clone the repository
 ```bash
+# Clone the repository
 git clone https://github.com/DrMSAbdullahi/GenPath-PPH.git
 cd GenPath-PPH
 ```
 
-# Install the necessary packages
 ```bash
+# Install the necessary packages
 pip install -r requirements.txt
 ```
 
