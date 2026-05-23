@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "genpath-pph"
-version = "1.0.5"
+version = "1.0.6"
 description = "Gene expression and KEGG pathway network integration using Persistent Path Homology"
 readme = "README.md"
 license = { file = "LICENSE.txt" }
