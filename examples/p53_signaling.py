@@ -19,8 +19,8 @@ Required files:
 import pandas as pd
 import numpy as np
 import pickle
-from genpath_pph import PathwayDataProcessor, GenPathHomology
-from genpath_pph import extract_pathway_expressions, extract_adjacency_matrices
+from core import GenPathHomology, PathwayDataProcessor
+from utils import extract_pathway_expressions, extract_adjacency_matrices
 
 
 # -----------------------------
