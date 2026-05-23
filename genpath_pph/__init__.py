@@ -55,7 +55,7 @@ from .utils import (
 )
 
 # ── Analysis functions (unchanged) ────────────────────────────────────────────
-from .analysis import (
+from .run_analysis import (
     pathway_level_difference_analysis,
     global_difference_analysis,
 )
@@ -68,7 +68,7 @@ from .api import (
     PathwayResult,      # Result dataclass
 )
 
-__version__ = "1.0.4"
+__version__ = "1.0.5"
 __author__  = "Muhammad Sirajo Abdullahi"
 __email__   = "abdullahi.sirajo@udusok.edu.ng"
 
