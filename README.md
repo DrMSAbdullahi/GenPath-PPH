@@ -152,16 +152,20 @@ These outputs can be directly integrated into downstream statistical, biological
 ## Installation
 
 ### Option 1 — Install from PyPI (recommended)
+```bash
 pip install genpath-pph
+```
 
 ### Option 2 — Install from source
 # Clone the repository
+```bash
 git clone https://github.com/DrMSAbdullahi/GenPath-PPH.git
 cd GenPath-PPH
+```
 
 # Install the necessary packages
+```bash
 pip install -r requirements.txt
-
 ```
 
 ---
@@ -171,6 +175,7 @@ pip install -r requirements.txt
 ### Quick start (new high-level API)
 
 #### One-liner: single pathway
+```python
     from genpath_pph import run_pathway
     import numpy as np
 
@@ -182,8 +187,10 @@ pip install -r requirements.txt
     # PathwayResult(SIGNIFICANT)
     #   β₀ → KS=0.4231  perm-p=0.002  Cohen-d=0.88  mean-diff=2.31
     #   β₁ → KS=0.3812  perm-p=0.014  Cohen-d=0.72  mean-diff=0.98
+```
 
 #### One-liner: batch over many pathways
+```python
     from genpath_pph import run_batch
     from genpath_pph import extract_adjacency_matrices, extract_pathway_expressions
 
@@ -199,8 +206,10 @@ pip install -r requirements.txt
     )
     significant = results_df[results_df["significant"]]
     print(f"{len(significant)} significant pathways found")
+```
 
 #### Object-oriented interface
+```python
     from genpath_pph import GenPathAnalysis
 
     model = GenPathAnalysis(n_permutations=1000)
@@ -211,10 +220,7 @@ pip install -r requirements.txt
     delta0, delta1 = model.delta_betti()
     phases = model.phase_summary()   # low / mid / high filtration breakdown
     result = model.test()
-
-### Original low-level API (unchanged)
-    from genpath_pph import GenPathHomology, PathwayDataProcessor
-    # ... rest of your existing usage examples
+```
 
 ### Import the package in Python
 
