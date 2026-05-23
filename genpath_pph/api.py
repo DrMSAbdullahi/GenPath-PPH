@@ -5,10 +5,25 @@ High-level one-liner API for GenPath-PPH.
 
 This module wraps the existing GenPathHomology, PathwayDataProcessor,
 and statistical functions into a single clean interface so that a full
-analysis can be run in as few lines as possible — similar to how other python packages work.
+analysis can be run in as few lines as possible — similar to how other
+Python packages such as scikit-learn or GUDHI work.
 
 All computation is done by the existing core classes. This file only
 chains them together and returns tidy results.
+
+Significance criteria (consistent with Abdullahi et al., 2025, CSBJ)
+---------------------------------------------------------------------
+A pathway is significant if ALL FOUR corrected p-values < alpha:
+    - KS test permutation p-value for β₀
+    - KS test permutation p-value for β₁
+    - Cohen's d permutation p-value for β₀
+    - Cohen's d permutation p-value for β₁
+
+For run_pathway() (single pathway), raw permutation p-values are used
+since there is only one pathway and no multiple testing correction is
+needed. For run_batch() (many pathways), Benjamini-Hochberg FDR
+correction is applied across all pathways before significance is
+determined, exactly as in the CSBJ paper.
 
 Quick start
 -----------
@@ -16,27 +31,24 @@ Quick start
     from genpath_pph.api import run_pathway, run_batch, GenPathAnalysis
 
     # ── Single pathway, one call ──────────────────────────────────────────
-    # expression : np.ndarray (n_genes, n_samples)  — already pathway-subset
-    # adj        : np.ndarray (n_genes, n_genes)    — directed adjacency
-
     result = run_pathway(X_disease, X_control, adj)
     print(result)
-    # PathwayResult(significant=True, ks_pval_b0=0.012, cohend_b0=0.81, ...)
+    # PathwayResult(SIGNIFICANT)
+    #   β₀ → KS=0.20  KS-perm-p=0.000  Cohen-d=-0.64  Cohen-perm-p=0.021  mean-diff=-0.40
+    #   β₁ → KS=0.72  KS-perm-p=0.000  Cohen-d=2.10   Cohen-perm-p=0.000  mean-diff=0.72
 
     # ── Batch over many pathways ──────────────────────────────────────────
     results_df = run_batch(
-        pathway_ids      = select_path_ids,
-        adj_matrices     = adj_matrices,          # dict: id -> DataFrame
-        pathway_exprs    = pathways_expressions,  # dict: id -> DataFrame
-        class_size       = 17,                    # samples per group
-        n_permutations   = 5000,
+        pathway_ids   = select_path_ids,
+        adj_matrices  = adj_matrices,
+        pathway_exprs = pathways_expressions,
+        class_size    = 17,
+        n_permutations = 5000,
     )
-    # returns a tidy pandas DataFrame, one row per pathway
 
     # ── Object-oriented style ─────────────────────────────────────────────
-    model = GenPathAnalysis(n_steps=100, n_permutations=1000)
+    model = GenPathAnalysis(n_permutations=1000)
     model.fit(X_disease, X_control, adj)
-
     b0_disease, b1_disease = model.betti_series("disease")
     b0_control, b1_control = model.betti_series("control")
     delta0, delta1         = model.delta_betti()
@@ -53,7 +65,7 @@ from typing import Dict, List, Optional, Tuple
 import numpy as np
 import pandas as pd
 
-# ── import from your existing modules ────────────────────────────────────────
+# ── import from existing modules ─────────────────────────────────────────────
 from .core import GenPathHomology
 from .utils import perform_ks_and_effectsize_tests
 
@@ -69,89 +81,65 @@ class PathwayResult:
 
     Attributes
     ----------
-    ks_stat_b0, ks_stat_b1     : KS statistic for β₀ and β₁ series.
-    cohend_b0, cohend_b1       : Cohen's d effect size.
-    perm_pval_b0, perm_pval_b1 : Empirical p-value from permutation test.
-    mean_diff_b0, mean_diff_b1 : Mean Betti difference (disease − control).
-    significant                : True if BOTH dimensions pass KS + Cohen d.
+    ks_stat_b0, ks_stat_b1         : KS statistic for β₀ and β₁ series.
+    perm_pval_b0, perm_pval_b1     : Permutation p-value for KS test.
+    cohend_b0, cohend_b1           : Cohen's d effect size.
+    cohend_pval_b0, cohend_pval_b1 : Permutation p-value for Cohen's d.
+    mean_diff_b0, mean_diff_b1     : Mean Betti difference (control − disease).
+    significant                    : True if ALL FOUR p-values < alpha.
+    alpha                          : Significance threshold used.
+
+    Notes
+    -----
+    Significance follows Abdullahi et al. (2025):
+        significant if KS-perm-p < alpha AND Cohen-perm-p < alpha
+        for BOTH β₀ and β₁ (four conditions total).
+    mean_diff is defined as mean(control) − mean(disease) across filtration.
     """
-    ks_stat_b0:   float
-    perm_pval_b0: float
-    cohend_b0:    float
-    mean_diff_b0: float
-    ks_stat_b1:   float
-    perm_pval_b1: float
-    cohend_b1:    float
-    mean_diff_b1: float
-    significant:  bool
-    alpha:        float = 0.05
-    cohend_threshold: float = 0.5
+    ks_stat_b0:     float
+    perm_pval_b0:   float
+    cohend_b0:      float
+    cohend_pval_b0: float
+    mean_diff_b0:   float
+    ks_stat_b1:     float
+    perm_pval_b1:   float
+    cohend_b1:      float
+    cohend_pval_b1: float
+    mean_diff_b1:   float
+    significant:    bool
+    alpha:          float = 0.05
 
     def __repr__(self):
         sig = "SIGNIFICANT" if self.significant else "not significant"
         return (
             f"PathwayResult({sig})\n"
-            f"  β₀ → KS={self.ks_stat_b0:.4f}  perm-p={self.perm_pval_b0:.4f}"
-            f"  Cohen-d={self.cohend_b0:.4f}  mean-diff={self.mean_diff_b0:.4f}\n"
-            f"  β₁ → KS={self.ks_stat_b1:.4f}  perm-p={self.perm_pval_b1:.4f}"
-            f"  Cohen-d={self.cohend_b1:.4f}  mean-diff={self.mean_diff_b1:.4f}"
+            f"  β₀ → KS={self.ks_stat_b0:.4f}  KS-perm-p={self.perm_pval_b0:.4f}"
+            f"  Cohen-d={self.cohend_b0:.4f}  Cohen-perm-p={self.cohend_pval_b0:.4f}"
+            f"  mean-diff={self.mean_diff_b0:.4f}\n"
+            f"  β₁ → KS={self.ks_stat_b1:.4f}  KS-perm-p={self.perm_pval_b1:.4f}"
+            f"  Cohen-d={self.cohend_b1:.4f}  Cohen-perm-p={self.cohend_pval_b1:.4f}"
+            f"  mean-diff={self.mean_diff_b1:.4f}"
         )
 
     def to_dict(self) -> dict:
         return {
-            "ks_stat_b0":   self.ks_stat_b0,
-            "perm_pval_b0": self.perm_pval_b0,
-            "cohend_b0":    self.cohend_b0,
-            "mean_diff_b0": self.mean_diff_b0,
-            "ks_stat_b1":   self.ks_stat_b1,
-            "perm_pval_b1": self.perm_pval_b1,
-            "cohend_b1":    self.cohend_b1,
-            "mean_diff_b1": self.mean_diff_b1,
-            "significant":  self.significant,
+            "ks_stat_b0":     self.ks_stat_b0,
+            "perm_pval_b0":   self.perm_pval_b0,
+            "cohend_b0":      self.cohend_b0,
+            "cohend_pval_b0": self.cohend_pval_b0,
+            "mean_diff_b0":   self.mean_diff_b0,
+            "ks_stat_b1":     self.ks_stat_b1,
+            "perm_pval_b1":   self.perm_pval_b1,
+            "cohend_b1":      self.cohend_b1,
+            "cohend_pval_b1": self.cohend_pval_b1,
+            "mean_diff_b1":   self.mean_diff_b1,
+            "significant":    self.significant,
         }
 
 
 # ══════════════════════════════════════════════════════════════════════════════
 # Internal helpers
 # ══════════════════════════════════════════════════════════════════════════════
-
-def _adj_df_to_edges(adj_df: pd.DataFrame) -> Tuple[np.ndarray, np.ndarray]:
-    """
-    Convert an adjacency DataFrame (output of PathwayDataProcessor.get_adjacency_matrix)
-    to a (rows, cols) edge index array compatible with persistent_path_homology_from_digraph.
-
-    Parameters
-    ----------
-    adj_df : pd.DataFrame — square binary adjacency matrix with gene labels as index/columns.
-
-    Returns
-    -------
-    edges : np.ndarray, shape (n_edges, 2) — integer row/col indices of edges.
-    genes : list of str — gene labels in row/column order.
-    """
-    genes = list(adj_df.index)
-    adj_np = adj_df.values.astype(int)
-    rows, cols = np.nonzero(adj_np)
-    edges = np.column_stack([rows, cols])
-    return edges, genes
-
-
-def _expr_df_to_array(expr_df: pd.DataFrame, genes: list) -> np.ndarray:
-    """
-    Reindex expression DataFrame to match gene order in adjacency matrix.
-
-    Parameters
-    ----------
-    expr_df : pd.DataFrame — gene expression (genes × samples).
-    genes   : list — gene order from adjacency matrix.
-
-    Returns
-    -------
-    np.ndarray, shape (n_genes, n_samples)
-    """
-    common = [g for g in genes if g in expr_df.index]
-    return expr_df.loc[common].values
-
 
 def _run_pph_single(
     X: np.ndarray,
@@ -177,24 +165,38 @@ def _stat_single_dim(
     betti_disease: list,
     n_permutations: int,
     seed: int,
-) -> Tuple[float, float, float]:
+) -> Tuple[float, float, float, float, float]:
     """
     Run KS + Cohen d permutation tests for one Betti dimension.
-    Uses the existing perform_ks_and_effectsize_tests under the hood
-    by packaging as a one-pathway dict.
 
-    Returns (ks_stat, perm_pval, cohend, mean_diff)
+    Returns
+    -------
+    ks_stat, ks_pval, cohend, cohend_pval, mean_diff
     """
-    # Reuse the existing permutation_test_effect_size directly
     from .utils import permutation_test_effect_size
 
     b_c = np.array(betti_control, dtype=float)
     b_d = np.array(betti_disease, dtype=float)
 
-    ks_stat, _, ks_pval    = permutation_test_effect_size(b_c, b_d, n_permutations, "ks",      seed)
-    cohend,  mean_d, cd_pval = permutation_test_effect_size(b_c, b_d, n_permutations, "cohen_d", seed)
+    # KS permutation test
+    ks_stat, _, ks_pval = permutation_test_effect_size(
+        b_c, b_d, n_permutations, "ks", seed
+    )
 
-    return float(ks_stat), float(ks_pval), float(cohend), float(mean_d) if not np.isnan(mean_d) else 0.0
+    # Cohen's d permutation test
+    cohend, mean_d, cd_pval = permutation_test_effect_size(
+        b_c, b_d, n_permutations, "cohen_d", seed
+    )
+
+    mean_diff = float(mean_d) if not np.isnan(mean_d) else 0.0
+
+    return (
+        float(ks_stat),
+        float(ks_pval),
+        float(cohend),
+        float(cd_pval),
+        mean_diff,
+    )
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -204,12 +206,11 @@ def _stat_single_dim(
 def run_pathway(
     X_disease: np.ndarray,
     X_control: np.ndarray,
-    adj: np.ndarray,
+    adj,
     filtration_scale: float = 1.0,
     step_size: float = 0.01,
     n_permutations: int = 1000,
     alpha: float = 0.05,
-    cohend_threshold: float = 0.5,
     distance_type: str = "1-abs-correlation",
     seed: int = 0,
 ) -> PathwayResult:
@@ -219,26 +220,23 @@ def run_pathway(
     Parameters
     ----------
     X_disease : np.ndarray, shape (n_genes, n_disease_samples)
-        Gene expression for disease group, rows already subset to pathway genes
-        and sorted to match rows/cols of adj.
+        Gene expression for disease group, rows subset to pathway genes.
     X_control : np.ndarray, shape (n_genes, n_control_samples)
         Gene expression for control group, same gene order as X_disease.
-    adj : np.ndarray, shape (n_genes, n_genes)
+    adj : np.ndarray or pd.DataFrame, shape (n_genes, n_genes)
         Binary directed adjacency matrix of the pathway graph.
         adj[i,j] = 1 means directed edge gene_i → gene_j.
-        Can also be a pd.DataFrame (output of PathwayDataProcessor.get_adjacency_matrix).
     filtration_scale : float, default 1.0
-        Maximum filtration value (distance range is [0, filtration_scale]).
+        Maximum filtration value.
     step_size : float, default 0.01
-        Filtration step size (101 steps with scale=1, step=0.01).
+        Filtration step size.
     n_permutations : int, default 1000
-        Number of permutations for empirical p-value.
+        Number of permutations for empirical p-values.
     alpha : float, default 0.05
-        Significance threshold.
-    cohend_threshold : float, default 0.5
-        Minimum |Cohen's d| for significance.
+        Significance threshold for all four p-values.
     distance_type : str, default '1-abs-correlation'
-        Distance metric. Options: '1-abs-correlation', '1-correlation', 'euclidean'.
+        Distance metric. Options: '1-abs-correlation', '1-correlation',
+        'euclidean'.
     seed : int, default 0
         Random seed for reproducibility.
 
@@ -246,18 +244,21 @@ def run_pathway(
     -------
     PathwayResult
 
+    Notes
+    -----
+    Significance follows Abdullahi et al. (2025, CSBJ):
+    A pathway is significant if ALL FOUR p-values < alpha:
+        KS-perm-p (β₀), KS-perm-p (β₁),
+        Cohen-perm-p (β₀), Cohen-perm-p (β₁).
+    Raw permutation p-values are used here (single pathway, no multiple
+    testing correction needed). For multi-pathway analysis use run_batch()
+    which applies Benjamini-Hochberg FDR correction.
+
     Example
     -------
-        import numpy as np
-        from genpath_pph.api import run_pathway
-
-        # X_disease, X_control: (n_genes, n_samples) expression arrays
-        # adj: (n_genes, n_genes) binary adjacency matrix
-        result = run_pathway(X_disease, X_control, adj)
+        from genpath_pph import run_pathway
+        result = run_pathway(X_disease, X_control, adj_matrix)
         print(result)
-        # PathwayResult(SIGNIFICANT)
-        #   β₀ → KS=0.4231  perm-p=0.0020  Cohen-d=0.8813  mean-diff=2.3100
-        #   β₁ → KS=0.3812  perm-p=0.0140  Cohen-d=0.7241  mean-diff=0.9800
     """
     # Accept both np.ndarray and pd.DataFrame adjacency
     if isinstance(adj, pd.DataFrame):
@@ -266,30 +267,32 @@ def run_pathway(
         adj_np = np.asarray(adj, dtype=int)
 
     rows, cols = np.nonzero(adj_np)
-    edges = np.column_stack([rows, cols]) if len(rows) > 0 else np.empty((0, 2), dtype=int)
+    edges = (np.column_stack([rows, cols]) if len(rows) > 0
+             else np.empty((0, 2), dtype=int))
 
     filtration = np.arange(0, filtration_scale, step_size)
 
-    # β₀
+    # Compute Betti series
     b0_c = _run_pph_single(X_control, edges, 0, filtration, distance_type)
     b0_d = _run_pph_single(X_disease, edges, 0, filtration, distance_type)
-
-    # β₁
     b1_c = _run_pph_single(X_control, edges, 1, filtration, distance_type)
     b1_d = _run_pph_single(X_disease, edges, 1, filtration, distance_type)
 
-    # Statistics
-    ks0, pval0, cd0, md0 = _stat_single_dim(b0_c, b0_d, n_permutations, seed)
-    ks1, pval1, cd1, md1 = _stat_single_dim(b1_c, b1_d, n_permutations, seed)
+    # Statistics — note: control vs disease order matches mean_diff definition
+    ks0, ksp0, cd0, cdp0, md0 = _stat_single_dim(b0_c, b0_d, n_permutations, seed)
+    ks1, ksp1, cd1, cdp1, md1 = _stat_single_dim(b1_c, b1_d, n_permutations, seed)
 
-    sig0 = (pval0 < alpha) and (abs(cd0) >= cohend_threshold)
-    sig1 = (pval1 < alpha) and (abs(cd1) >= cohend_threshold)
+    # Significance: all four p-values must be < alpha
+    sig0 = (ksp0 < alpha) and (cdp0 < alpha)
+    sig1 = (ksp1 < alpha) and (cdp1 < alpha)
 
     return PathwayResult(
-        ks_stat_b0=ks0,   perm_pval_b0=pval0, cohend_b0=cd0,   mean_diff_b0=md0,
-        ks_stat_b1=ks1,   perm_pval_b1=pval1, cohend_b1=cd1,   mean_diff_b1=md1,
+        ks_stat_b0=ks0,   perm_pval_b0=ksp0,
+        cohend_b0=cd0,    cohend_pval_b0=cdp0,  mean_diff_b0=md0,
+        ks_stat_b1=ks1,   perm_pval_b1=ksp1,
+        cohend_b1=cd1,    cohend_pval_b1=cdp1,  mean_diff_b1=md1,
         significant=sig0 and sig1,
-        alpha=alpha, cohend_threshold=cohend_threshold,
+        alpha=alpha,
     )
 
 
@@ -306,7 +309,6 @@ def run_batch(
     step_size: float = 0.01,
     n_permutations: int = 5000,
     alpha: float = 0.05,
-    cohend_threshold: float = 0.5,
     distance_type: str = "1-abs-correlation",
     seed: int = 0,
     verbose: bool = True,
@@ -314,9 +316,11 @@ def run_batch(
     """
     Run GenPath-PPH across multiple pathways in one call.
 
-    This directly wraps GenPathHomology.compute_betti_numbers() for PPH
-    computation and perform_ks_and_effectsize_tests() for statistics,
-    giving you a single tidy DataFrame as output.
+    Wraps GenPathHomology.compute_betti_numbers() for PPH computation
+    and perform_ks_and_effectsize_tests() for statistics, applying
+    Benjamini-Hochberg FDR correction exactly as in Abdullahi et al.
+    (2025, CSBJ). A pathway is significant if all four FDR-corrected
+    p-values (KS and Cohen's d for both β₀ and β₁) are < alpha.
 
     Parameters
     ----------
@@ -326,16 +330,16 @@ def run_batch(
         Maps pathway_id -> adjacency DataFrame
         (output of PathwayDataProcessor.get_adjacency_matrix).
     pathway_exprs : dict
-        Maps pathway_id -> expression DataFrame (genes × samples).
-        Columns: first class_size samples = control, next class_size = disease.
+        Maps pathway_id -> expression DataFrame (genes x samples).
+        Columns: first class_size columns = control,
+                 next class_size columns = disease.
         (output of extract_pathway_expressions in utils.py)
     class_size : int, default 17
-        Number of samples per group (control and disease).
+        Number of samples per group.
     filtration_scale : float, default 1.0
     step_size : float, default 0.01
     n_permutations : int, default 5000
     alpha : float, default 0.05
-    cohend_threshold : float, default 0.5
     distance_type : str, default '1-abs-correlation'
     seed : int, default 0
     verbose : bool, default True
@@ -343,17 +347,21 @@ def run_batch(
     Returns
     -------
     pd.DataFrame with columns:
-        path_id, mean_diff_b0, es_b0, perm_pval_b0, fdr_pval_b0,
-                 mean_diff_b1, es_b1, perm_pval_b1, fdr_pval_b1,
-        significant (True if both dimensions pass after FDR correction)
+        path_id,
+        mean_diff_b0, es_b0, es_raw_pval_b0, fdr_es_b0,
+                      ks_stat_b0, ks_raw_pval_b0, fdr_ks_b0,
+        mean_diff_b1, es_b1, es_raw_pval_b1, fdr_es_b1,
+                      ks_stat_b1, ks_raw_pval_b1, fdr_ks_b1,
+        significant
 
     Example
     -------
-        from genpath_pph.api import run_batch
-        from genpath_pph.utils import extract_adjacency_matrices, extract_pathway_expressions
+        from genpath_pph import run_batch
+        from genpath_pph import extract_adjacency_matrices
+        from genpath_pph import extract_pathway_expressions
 
-        adj_matrices    = extract_adjacency_matrices(select_path_ids, ...)
-        pathway_exprs   = extract_pathway_expressions(select_path_ids, ...)
+        adj_matrices  = extract_adjacency_matrices(select_path_ids, ...)
+        pathway_exprs = extract_pathway_expressions(select_path_ids, ...)
 
         results = run_batch(
             pathway_ids   = select_path_ids,
@@ -366,34 +374,35 @@ def run_batch(
     """
     pph = GenPathHomology()
 
-    # ── Step 1: compute Betti series for all pathways (both dims) ─────────
+    # ── Step 1: compute Betti series for all pathways ─────────────────────
     if verbose:
         print(f"Computing Betti series for {len(pathway_ids)} pathways...")
 
     betti_dim0 = pph.compute_betti_numbers(
-        select_path_ids    = pathway_ids,
-        adj_matrices       = {k: v.values.astype(int) for k, v in adj_matrices.items()},
+        select_path_ids      = pathway_ids,
+        adj_matrices         = {k: v.values.astype(int)
+                                for k, v in adj_matrices.items()},
         pathways_expressions = pathway_exprs,
-        target_dimension   = 0,
-        filtration_scale   = filtration_scale,
-        step_size          = step_size,
-        class_size         = class_size,
-        distance_type      = distance_type,
+        target_dimension     = 0,
+        filtration_scale     = filtration_scale,
+        step_size            = step_size,
+        class_size           = class_size,
+        distance_type        = distance_type,
     )
 
     betti_dim1 = pph.compute_betti_numbers(
-        select_path_ids    = pathway_ids,
-        adj_matrices       = {k: v.values.astype(int) for k, v in adj_matrices.items()},
+        select_path_ids      = pathway_ids,
+        adj_matrices         = {k: v.values.astype(int)
+                                for k, v in adj_matrices.items()},
         pathways_expressions = pathway_exprs,
-        target_dimension   = 1,
-        filtration_scale   = filtration_scale,
-        step_size          = step_size,
-        class_size         = class_size,
-        distance_type      = distance_type,
+        target_dimension     = 1,
+        filtration_scale     = filtration_scale,
+        step_size            = step_size,
+        class_size           = class_size,
+        distance_type        = distance_type,
     )
 
-    # ── Step 2: repackage into the dict format expected by perform_ks_and_effectsize_tests ──
-    # That function expects: betti_dict[pid]['control'] and betti_dict[pid]['disease']
+    # ── Step 2: repackage into dict format for statistical tests ──────────
     betti_dict_b0 = {
         pid: {
             "control": np.array(betti_dim0["control"][pid], dtype=float),
@@ -409,47 +418,51 @@ def run_batch(
         for pid in pathway_ids
     }
 
-    # ── Step 3: statistical tests using the existing function ─────────────
+    # ── Step 3: statistical tests with BH correction ──────────────────────
     if verbose:
         print("Running statistical tests (β₀)...")
     df_b0 = perform_ks_and_effectsize_tests(
-        betti_dict     = betti_dict_b0,
-        path_ids       = pathway_ids,
+        betti_dict       = betti_dict_b0,
+        path_ids         = pathway_ids,
         num_permutations = n_permutations,
-        seed           = seed,
+        seed             = seed,
     ).rename(columns={
-        "mean_diff_observed": "mean_diff_b0",
-        "es_observed":        "es_b0",
-        "es_raw_pvalue":      "es_raw_pval_b0",
-        "ks_observed":        "ks_stat_b0",
-        "ks_raw_pvalue":      "ks_raw_pval_b0",
-        "es_corrected_pvalue":"fdr_es_b0",
-        "ks_corrected_pvalue":"fdr_ks_b0",
+        "mean_diff_observed":  "mean_diff_b0",
+        "es_observed":         "es_b0",
+        "es_raw_pvalue":       "es_raw_pval_b0",
+        "ks_observed":         "ks_stat_b0",
+        "ks_raw_pvalue":       "ks_raw_pval_b0",
+        "es_corrected_pvalue": "fdr_es_b0",
+        "ks_corrected_pvalue": "fdr_ks_b0",
     })
 
     if verbose:
         print("Running statistical tests (β₁)...")
     df_b1 = perform_ks_and_effectsize_tests(
-        betti_dict     = betti_dict_b1,
-        path_ids       = pathway_ids,
+        betti_dict       = betti_dict_b1,
+        path_ids         = pathway_ids,
         num_permutations = n_permutations,
-        seed           = seed,
+        seed             = seed,
     ).rename(columns={
-        "mean_diff_observed": "mean_diff_b1",
-        "es_observed":        "es_b1",
-        "es_raw_pvalue":      "es_raw_pval_b1",
-        "ks_observed":        "ks_stat_b1",
-        "ks_raw_pvalue":      "ks_raw_pval_b1",
-        "es_corrected_pvalue":"fdr_es_b1",
-        "ks_corrected_pvalue":"fdr_ks_b1",
+        "mean_diff_observed":  "mean_diff_b1",
+        "es_observed":         "es_b1",
+        "es_raw_pvalue":       "es_raw_pval_b1",
+        "ks_observed":         "ks_stat_b1",
+        "ks_raw_pvalue":       "ks_raw_pval_b1",
+        "es_corrected_pvalue": "fdr_es_b1",
+        "ks_corrected_pvalue": "fdr_ks_b1",
     })
 
     # ── Step 4: merge and add significance flag ────────────────────────────
     results = df_b0.merge(df_b1, on="path_id")
 
+    # Significance: all four FDR-corrected p-values < alpha
+    # (KS and Cohen's d for both β₀ and β₁)
     results["significant"] = (
-        (results["fdr_ks_b0"] < alpha) & (results["es_b0"].abs() >= cohend_threshold) &
-        (results["fdr_ks_b1"] < alpha) & (results["es_b1"].abs() >= cohend_threshold)
+        (results["fdr_ks_b0"] < alpha) &
+        (results["fdr_es_b0"] < alpha) &
+        (results["fdr_ks_b1"] < alpha) &
+        (results["fdr_es_b1"] < alpha)
     )
 
     if verbose:
@@ -470,13 +483,16 @@ class GenPathAnalysis:
     Mirrors the scikit-learn fit/predict pattern. Internally delegates
     all computation to GenPathHomology.
 
+    Significance follows Abdullahi et al. (2025, CSBJ): a pathway is
+    significant if ALL FOUR permutation p-values < alpha (KS and
+    Cohen's d for both β₀ and β₁).
+
     Parameters
     ----------
     filtration_scale : float, default 1.0
     step_size : float, default 0.01
     n_permutations : int, default 1000
     alpha : float, default 0.05
-    cohend_threshold : float, default 0.5
     distance_type : str, default '1-abs-correlation'
     seed : int, default 0
 
@@ -499,17 +515,15 @@ class GenPathAnalysis:
         step_size: float = 0.01,
         n_permutations: int = 1000,
         alpha: float = 0.05,
-        cohend_threshold: float = 0.5,
         distance_type: str = "1-abs-correlation",
         seed: int = 0,
     ):
-        self.filtration_scale  = filtration_scale
-        self.step_size         = step_size
-        self.n_permutations    = n_permutations
-        self.alpha             = alpha
-        self.cohend_threshold  = cohend_threshold
-        self.distance_type     = distance_type
-        self.seed              = seed
+        self.filtration_scale = filtration_scale
+        self.step_size        = step_size
+        self.n_permutations   = n_permutations
+        self.alpha            = alpha
+        self.distance_type    = distance_type
+        self.seed             = seed
 
         self._b0_disease: Optional[np.ndarray] = None
         self._b1_disease: Optional[np.ndarray] = None
@@ -522,7 +536,7 @@ class GenPathAnalysis:
         self,
         X_disease: np.ndarray,
         X_control: np.ndarray,
-        adj,               # np.ndarray or pd.DataFrame
+        adj,
     ) -> "GenPathAnalysis":
         """
         Compute PPH Betti series for disease and control groups.
@@ -532,7 +546,6 @@ class GenPathAnalysis:
         X_disease : np.ndarray, shape (n_genes, n_disease_samples)
         X_control : np.ndarray, shape (n_genes, n_control_samples)
         adj : np.ndarray or pd.DataFrame, shape (n_genes, n_genes)
-            Binary directed adjacency matrix.
 
         Returns
         -------
@@ -544,14 +557,19 @@ class GenPathAnalysis:
             adj_np = np.asarray(adj, dtype=int)
 
         rows, cols = np.nonzero(adj_np)
-        edges = np.column_stack([rows, cols]) if len(rows) > 0 else np.empty((0,2), dtype=int)
+        edges = (np.column_stack([rows, cols]) if len(rows) > 0
+                 else np.empty((0, 2), dtype=int))
 
         self._thresholds = np.arange(0, self.filtration_scale, self.step_size)
 
-        self._b0_control = np.array(_run_pph_single(X_control, edges, 0, self._thresholds, self.distance_type))
-        self._b0_disease = np.array(_run_pph_single(X_disease, edges, 0, self._thresholds, self.distance_type))
-        self._b1_control = np.array(_run_pph_single(X_control, edges, 1, self._thresholds, self.distance_type))
-        self._b1_disease = np.array(_run_pph_single(X_disease, edges, 1, self._thresholds, self.distance_type))
+        self._b0_control = np.array(
+            _run_pph_single(X_control, edges, 0, self._thresholds, self.distance_type))
+        self._b0_disease = np.array(
+            _run_pph_single(X_disease, edges, 0, self._thresholds, self.distance_type))
+        self._b1_control = np.array(
+            _run_pph_single(X_control, edges, 1, self._thresholds, self.distance_type))
+        self._b1_disease = np.array(
+            _run_pph_single(X_disease, edges, 1, self._thresholds, self.distance_type))
 
         self._fitted = True
         return self
@@ -575,11 +593,16 @@ class GenPathAnalysis:
         elif group == "control":
             return self._b0_control.copy(), self._b1_control.copy()
         else:
-            raise ValueError(f"group must be 'disease' or 'control', got '{group}'.")
+            raise ValueError(
+                f"group must be 'disease' or 'control', got '{group}'."
+            )
 
     def delta_betti(self) -> Tuple[np.ndarray, np.ndarray]:
         """
-        Return difference curves Δβ₀(t) and Δβ₁(t) = disease − control.
+        Return difference curves Δβ₀(t) and Δβ₁(t) = control − disease.
+
+        Note: control − disease, consistent with mean_diff definition
+        in Abdullahi et al. (2025).
 
         Returns
         -------
@@ -587,7 +610,8 @@ class GenPathAnalysis:
         delta1 : np.ndarray
         """
         self._check_fitted()
-        return self._b0_disease - self._b0_control, self._b1_disease - self._b1_control
+        return (self._b0_control - self._b0_disease,
+                self._b1_control - self._b1_disease)
 
     def thresholds(self) -> np.ndarray:
         """Return the filtration threshold values."""
@@ -595,9 +619,15 @@ class GenPathAnalysis:
         return self._thresholds.copy()
 
     def aggregate_score(self) -> Dict[str, float]:
-        """Mean Δβ across filtration (pathway dysregulation score)."""
+        """
+        Mean Δβ across filtration (pathway dysregulation score).
+        Defined as mean(control) − mean(disease).
+        """
         d0, d1 = self.delta_betti()
-        return {"delta_beta0": float(d0.mean()), "delta_beta1": float(d1.mean())}
+        return {
+            "delta_beta0": float(d0.mean()),
+            "delta_beta1": float(d1.mean()),
+        }
 
     def phase_summary(
         self,
@@ -610,7 +640,9 @@ class GenPathAnalysis:
         ----------
         phases : dict, optional
             {phase_name: (low_threshold, high_threshold)}
-            Default: {'low': (0.0, 0.33), 'mid': (0.33, 0.66), 'high': (0.66, 1.0)}
+            Default: {'low': (0.0, 0.33),
+                      'mid': (0.33, 0.66),
+                      'high': (0.66, 1.0)}
 
         Returns
         -------
@@ -618,7 +650,11 @@ class GenPathAnalysis:
         """
         self._check_fitted()
         if phases is None:
-            phases = {"low": (0.0, 0.33), "mid": (0.33, 0.66), "high": (0.66, 1.0)}
+            phases = {
+                "low":  (0.00, 0.33),
+                "mid":  (0.33, 0.66),
+                "high": (0.66, 1.00),
+            }
         d0, d1 = self.delta_betti()
         summary = {}
         for name, (lo, hi) in phases.items():
@@ -631,7 +667,10 @@ class GenPathAnalysis:
 
     def test(self) -> PathwayResult:
         """
-        Run KS + Cohen d + permutation test on the fitted Betti series.
+        Run KS + Cohen d permutation tests on the fitted Betti series.
+
+        Significance follows Abdullahi et al. (2025, CSBJ):
+        significant if ALL FOUR permutation p-values < alpha.
 
         Returns
         -------
@@ -639,23 +678,29 @@ class GenPathAnalysis:
         """
         self._check_fitted()
 
-        ks0, pval0, cd0, md0 = _stat_single_dim(
-            self._b0_control.tolist(), self._b0_disease.tolist(),
-            self.n_permutations, self.seed
+        ks0, ksp0, cd0, cdp0, md0 = _stat_single_dim(
+            self._b0_control.tolist(),
+            self._b0_disease.tolist(),
+            self.n_permutations,
+            self.seed,
         )
-        ks1, pval1, cd1, md1 = _stat_single_dim(
-            self._b1_control.tolist(), self._b1_disease.tolist(),
-            self.n_permutations, self.seed
+        ks1, ksp1, cd1, cdp1, md1 = _stat_single_dim(
+            self._b1_control.tolist(),
+            self._b1_disease.tolist(),
+            self.n_permutations,
+            self.seed,
         )
 
-        sig0 = (pval0 < self.alpha) and (abs(cd0) >= self.cohend_threshold)
-        sig1 = (pval1 < self.alpha) and (abs(cd1) >= self.cohend_threshold)
+        sig0 = (ksp0 < self.alpha) and (cdp0 < self.alpha)
+        sig1 = (ksp1 < self.alpha) and (cdp1 < self.alpha)
 
         return PathwayResult(
-            ks_stat_b0=ks0,   perm_pval_b0=pval0, cohend_b0=cd0,   mean_diff_b0=md0,
-            ks_stat_b1=ks1,   perm_pval_b1=pval1, cohend_b1=cd1,   mean_diff_b1=md1,
+            ks_stat_b0=ks0,   perm_pval_b0=ksp0,
+            cohend_b0=cd0,    cohend_pval_b0=cdp0,  mean_diff_b0=md0,
+            ks_stat_b1=ks1,   perm_pval_b1=ksp1,
+            cohend_b1=cd1,    cohend_pval_b1=cdp1,  mean_diff_b1=md1,
             significant=sig0 and sig1,
-            alpha=self.alpha, cohend_threshold=self.cohend_threshold,
+            alpha=self.alpha,
         )
 
     def _check_fitted(self):
