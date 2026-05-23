@@ -18,7 +18,7 @@ import os                  # Handling directory paths and creating folders
 import numpy as np         # Numerical computations and array manipulations
 import pandas as pd          # DataFrame operations for gene expression and adjacency matrices
 import matplotlib.pyplot as plt      # Visualization of persistence landscapes and results
-from core import PathwayDataProcessor, GenPathHomology
+from .core import PathwayDataProcessor, GenPathHomology
                         # Core classes for pathway processing and persistent path homology computation
 from scipy.stats import ks_2samp
 from statsmodels.stats.multitest import multipletests
