@@ -68,7 +68,7 @@ from .api import (
     PathwayResult,      # Result dataclass
 )
 
-__version__ = "1.0.5"
+__version__ = "1.0.6"
 __author__  = "Muhammad Sirajo Abdullahi"
 __email__   = "abdullahi.sirajo@udusok.edu.ng"
 
