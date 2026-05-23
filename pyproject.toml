@@ -24,12 +24,13 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage   = "https://github.com/DrMSAbdullahi/GenPath-PPH"
+Homepage   = "https://sites.google.com/view/msabdullahi/"
 Repository = "https://github.com/DrMSAbdullahi/GenPath-PPH"
 Paper      = "https://doi.org/10.1016/j.csbj.2025.11.018"
 
+# === Explicit Package Configuration ===
 [tool.setuptools]
 packages = ["genpath_pph"]
 
 [tool.setuptools.package-data]
-genpath_pph = ["*.py"]
+genpath_pph = ["*.py", "*.txt", "*.csv"]
