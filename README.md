@@ -222,10 +222,10 @@ pip install -r requirements.txt
     result = model.test()
 ```
 
-### Import the package in Python
+### Import the package in Python (low-level API)
 
 ```python
-from core import GenPathHomology, PathwayDataProcessor
+from genpath_pph import GenPathHomology, PathwayDataProcessor
 import numpy as np
 
 # Suppose you have a toy adjacency matrix for a pathway
@@ -258,6 +258,34 @@ betti_numbers = pph.path_homology_for_connected_digraph(allowed_paths, max_path=
 print("Allowed paths:", allowed_paths)
 print("Boundary matrices:", boundary_matrices)
 print("Betti numbers:", betti_numbers)
+```
+
+---
+
+### Built-in toy dataset
+
+```python
+from genpath_pph import GenPathHomology, load_toy_data
+
+# Load built-in toy expression data and pathway edges
+df, edges, filtration = load_toy_data()
+
+# Split into control and disease groups
+X_control = df[["C1", "C2", "C3"]].values
+X_disease  = df[["D1", "D2", "D3"]].values
+
+pph = GenPathHomology()
+
+# Compute Betti-0 for each group
+betti_0_control, _ = pph.persistent_path_homology_from_digraph(
+    X_control, edges, target_dimension=0, filtration=filtration
+)
+betti_0_disease, _ = pph.persistent_path_homology_from_digraph(
+    X_disease, edges, target_dimension=0, filtration=filtration
+)
+
+print("Control β₀:", [int(x) for x in betti_0_control])
+print("Disease β₀:", [int(x) for x in betti_0_disease])
 ```
 
 ### Run some examples
