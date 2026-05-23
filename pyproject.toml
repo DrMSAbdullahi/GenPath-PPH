@@ -5,8 +5,9 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "genpath-pph"
 version = "1.0.0"
-description = "Gene expression and KEGG pathway network integration using Persistent Path Homology"
+description = "GenPath-PPH: Gene expression and KEGG pathway network integration using Persistent Path Homology for disease pathway analysis"
 readme = "README.md"
+readme-content-type = "text/markdown"     # ← Added (recommended)
 license = { file = "LICENSE.txt" }
 authors = [
     { name = "Muhammad Sirajo Abdullahi", email = "abdullahi.sirajo@udusok.edu.ng" }
@@ -19,7 +20,8 @@ keywords = [
     "hepatocellular-carcinoma",
     "gene-expression",
     "betti-numbers",
-    "KEGG"
+    "KEGG",
+    "TDA"
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -31,29 +33,31 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Bio-Informatics",
     "Topic :: Scientific/Engineering :: Mathematics",
     "Intended Audience :: Science/Research",
+    "Development Status :: 4 - Beta",
 ]
 requires-python = ">=3.10"
 dependencies = [
     "numpy>=1.24",
     "scipy>=1.14",
     "pandas>=1.5",
-    "persim>=0.2.1",
-    "statsmodels>=0.13",
+    "networkx>=3.0",
     "matplotlib>=3.4",
     "seaborn>=0.11",
     "biopython>=1.76",
+    "statsmodels>=0.13",
 ]
 
 [project.optional-dependencies]
-full = ["gudhi", "gseapy>=1.1"]
-dev  = ["build", "twine", "pytest", "jupyter"]
+full = ["gudhi>=3.8", "gseapy>=1.1", "persim>=0.2.1"]
+dev = ["build", "twine", "pytest", "jupyter", "black", "isort"]
 
 [project.urls]
-Homepage   = "https://github.com/DrMSAbdullahi/GenPath-PPH"
+Homepage = "https://github.com/DrMSAbdullahi/GenPath-PPH"
 Repository = "https://github.com/DrMSAbdullahi/GenPath-PPH"
-Paper      = "https://doi.org/10.1016/j.csbj.2025.11.018"
-Issues     = "https://github.com/DrMSAbdullahi/GenPath-PPH/issues"
+"Paper (CSBJ)" = "https://doi.org/10.1016/j.csbj.2025.11.018"
+Issues = "https://github.com/DrMSAbdullahi/GenPath-PPH/issues"
+Documentation = "https://github.com/DrMSAbdullahi/GenPath-PPH#readme"
 
 [tool.setuptools.packages.find]
-where   = ["."]
+where = ["."]
 include = ["genpath_pph*"]
