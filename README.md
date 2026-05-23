@@ -1,7 +1,7 @@
 # GenPath-PPH: Gene ExpressioN and PATHway network integration using Persistent Path Homology
 
 This repository contains the code and supplementary material for the manuscript:
-Abdullahi et al., "GenPath-PPH: Integrating Gene Expression and Pathway Networks via Persistent Path Homology Enhances Detection of Disease-Relevant Pathways", submitted to *Computational and Structural Biotechnology Journal*, 2025.
+Abdullahi et al., "GenPath-PPH: Integrating Gene Expression and Pathway Networks via Persistent Path Homology Enhances Detection of Disease-Relevant Pathways", *Computational and Structural Biotechnology Journal*, 27, 5348-5362, 2025. https://doi.org/10.1016/j.csbj.2025.11.018
 
 ---
 
@@ -151,20 +151,70 @@ These outputs can be directly integrated into downstream statistical, biological
 
 ## Installation
 
-To use this code, you will need Python and several dependencies. You can install them using `pip`:
+### Option 1 — Install from PyPI (recommended)
+pip install genpath-pph
 
-```bash
+### Option 2 — Install from source
 # Clone the repository
 git clone https://github.com/DrMSAbdullahi/GenPath-PPH.git
 cd GenPath-PPH
 
 # Install the necessary packages
 pip install -r requirements.txt
+
 ```
 
 ---
 
 ## Usage
+
+### Quick start (new high-level API)
+
+#### One-liner: single pathway
+    from genpath_pph import run_pathway
+    import numpy as np
+
+    # X_disease, X_control : np.ndarray (n_genes, n_samples)
+    # adj_matrix            : np.ndarray (n_genes, n_genes)
+
+    result = run_pathway(X_disease, X_control, adj_matrix)
+    print(result)
+    # PathwayResult(SIGNIFICANT)
+    #   β₀ → KS=0.4231  perm-p=0.002  Cohen-d=0.88  mean-diff=2.31
+    #   β₁ → KS=0.3812  perm-p=0.014  Cohen-d=0.72  mean-diff=0.98
+
+#### One-liner: batch over many pathways
+    from genpath_pph import run_batch
+    from genpath_pph import extract_adjacency_matrices, extract_pathway_expressions
+
+    adj_matrices   = extract_adjacency_matrices(select_path_ids, ...)
+    pathway_exprs  = extract_pathway_expressions(select_path_ids, ...)
+
+    results_df = run_batch(
+        pathway_ids    = select_path_ids,
+        adj_matrices   = adj_matrices,
+        pathway_exprs  = pathway_exprs,
+        class_size     = 17,
+        n_permutations = 5000,
+    )
+    significant = results_df[results_df["significant"]]
+    print(f"{len(significant)} significant pathways found")
+
+#### Object-oriented interface
+    from genpath_pph import GenPathAnalysis
+
+    model = GenPathAnalysis(n_permutations=1000)
+    model.fit(X_disease, X_control, adj_matrix)
+
+    b0_d, b1_d = model.betti_series("disease")
+    b0_c, b1_c = model.betti_series("control")
+    delta0, delta1 = model.delta_betti()
+    phases = model.phase_summary()   # low / mid / high filtration breakdown
+    result = model.test()
+
+### Original low-level API (unchanged)
+    from genpath_pph import GenPathHomology, PathwayDataProcessor
+    # ... rest of your existing usage examples
 
 ### Import the package in Python
 
@@ -242,18 +292,23 @@ These examples demonstrate how to compute PPH (Betti number computation), visual
 GenPath-PPH/
 │
 ├── README.md
-├── LICENSE
-├── requirements.txt        # Python dependencies
-├── genpath_pph/            # Core package
+├── LICENSE.txt
+├── requirements.txt            # Python dependencies
+├── pyproject.toml              # PyPI packaging config       
+├── .github/
+│   └── workflows/
+│       └── publish.yml         # Auto-publish to PyPI        
+├── genpath_pph/                # Core package
 │   ├── __init__.py
-│   ├── core.py             # Core PPH computations, including --test toy example
-│   ├── utils.py            # Utility functions (allowed paths, boundaries, etc.)
-│   └── run_analysis.py         # Optional analysis scripts for custom workflows
-├── examples/               # Example scripts for toy and real pathways
-│   ├── toy_example.py      # Wrap in core.py --test
-│   ├── p53_signaling.py    # Real pathway example
-│   └── ferroptosis.py      # Real pathway example
-├── notebooks/              # Jupyter notebooks for detailed analyses
+│   ├── core.py                 # Core PPH computations
+│   ├── utils.py                # Utility functions (allowed paths, boundaries, etc.)
+│   ├── run_analysis.py         # Optional analysis scripts for custom workflows
+│   └── api.py                  # High-level one-liner API    
+├── examples/                   # Example scripts for toy and real pathways
+│   ├── toy_example.py
+│   ├── p53_signaling.py
+│   └── ferroptosis.py
+├── notebooks/                  # Jupyter notebooks for detailed analyses
 │   ├── toy_example_ph_vs_pph.ipynb     # Compare PH vs PPH on toy data
 │   ├── genpath_pph_global.ipynb        # Global difference analysis on HCC data
 │   └── genpath_pph_pathway_level.ipynb # Pathway-level analysis on HCC data
@@ -305,6 +360,6 @@ For the full Creative Commons Attribution 4.0 International License text, please
 
 If you use this codebook in your research or publication, please cite:
 
-[Abdullahi, M.S.; Piro, R.M.; Suratanee, A.; Plaimas, K. "GenPath-PPH: Integrating Gene Expression and Pathway Networks via Persistent Path Homology Enhances Detection of Disease-Relevant Pathways". Computational and Structural Biotechnology Journal (Submitted), 2025]
+[Abdullahi, M.S.; Piro, R.M.; Suratanee, A.; Plaimas, K. "GenPath-PPH: Integrating Gene Expression and Pathway Networks via Persistent Path Homology Enhances Detection of Disease-Relevant Pathways". Computational and Structural Biotechnology Journal (Submitted), 27, 5348-5362, 2025. https://doi.org/10.1016/j.csbj.2025.11.018]
 
 For questions or additional permissions, contact [abdullahi.sirajo@udusok.edu.ng].
