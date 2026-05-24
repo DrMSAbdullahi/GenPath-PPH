@@ -7,6 +7,7 @@ This package provides tools for:
 - Generating Betti number series across expression-induced filtrations.
 - Statistical analysis (KS test, Cohen's d, permutation testing).
 - Utilities for adjacency extraction and pathway-level summaries.
+- Inverse mapping functions for GenPath-PPH persistent path homology results.
 
 Reference
 ---------
@@ -68,7 +69,16 @@ from .api import (
     PathwayResult,      # Result dataclass
 )
 
-__version__ = "1.0.6"
+# ── Tracing functions (new) ───────────────────────────────────────────────────
+from .trace import (
+    trace_persistent_features,
+    summarise_gene_frequency,
+    compare_group_features,
+    trace_features_by_phase,
+    validate_edges_at_filtration,
+)
+
+__version__ = "1.0.7"
 __author__  = "Muhammad Sirajo Abdullahi"
 __email__   = "abdullahi.sirajo@udusok.edu.ng"
 
@@ -94,4 +104,10 @@ __all__ = [
     "run_batch",
     "GenPathAnalysis",
     "PathwayResult",
+    # Tracing (new)
+    "trace_persistent_features",
+    "summarise_gene_frequency",
+    "compare_group_features",
+    "trace_features_by_phase",
+    "validate_edges_at_filtration",
 ]
