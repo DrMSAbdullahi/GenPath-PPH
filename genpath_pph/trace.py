@@ -566,10 +566,10 @@ def trace_persistent_features(
 
     feature_rows = []
     summary_rows = []
-    prev_betti   = betti_series[0]
+    prev_betti   = int(betti_series[0])
 
     for t in range(len(betti_series)):
-        curr_betti = betti_series[t]
+        curr_betti = int(betti_series[t])
 
         # Process only steps where Betti changes (always process step 0)
         if curr_betti == prev_betti and t > 0:
@@ -577,7 +577,7 @@ def trace_persistent_features(
             continue
 
         fval   = round(float(filtration[t]), 6)
-        change = int(curr_betti) - int(prev_betti) if t > 0 else int(curr_betti)
+        change = curr_betti - prev_betti if t > 0 else curr_betti
 
         edges_raw = edges_at_each_filtration[t]
         edges_arr = (np.array(edges_raw, dtype=int)
@@ -585,11 +585,12 @@ def trace_persistent_features(
                      else np.empty((0, 2), dtype=int))
 
         if verbose:
-            print(f"  Step {t} (filtration={fval:.4f}): "
+            print(f"  Step {t:3d} (filtration={fval:.4f}): "
                   f"β={curr_betti}, change={change:+d}, "
                   f"active edges={len(edges_arr)}")
 
         all_genes_this_step = []
+        n_features_this_step = 0
 
         # ── β₀: connected components ──────────────────────────────────────
         if target_dimension == 0:
@@ -597,27 +598,30 @@ def trace_persistent_features(
             comp_list  = sorted(components.values(), key=len, reverse=True)
             comp_list  = [c for c in comp_list if len(c) >= min_component_size]
 
+            n_features_this_step = len(comp_list)
+
             for feat_id, component in enumerate(comp_list):
                 gene_members = [gene_names[n] for n in component]
                 comp_set     = set(component)
 
-                within = (edges_arr[np.array([
+                # Edges within this component
+                within_edges = (edges_arr[np.array([
                     int(r[0]) in comp_set and int(r[1]) in comp_set
                     for r in edges_arr
-                ])] if len(edges_arr) > 0 else edges_arr)
+                ])] if len(edges_arr) > 0 else [])
 
                 edge_pairs = [
                     (gene_names[int(r[0])], gene_names[int(r[1])])
-                    for r in within
+                    for r in within_edges
                 ]
                 all_genes_this_step.extend(gene_members)
 
                 feature_rows.append({
                     "step":             t,
                     "filtration_value": fval,
-                    "betti":            int(curr_betti),
+                    "betti":            curr_betti,
                     "change":           change,
-                    "n_features":       len(comp_list),
+                    "n_features":       n_features_this_step,
                     "feature_id":       feat_id,
                     "feature_type":     "component",
                     "gene_members":     gene_members,
@@ -633,12 +637,13 @@ def trace_persistent_features(
             cycles = _get_ph_cycles_at_step(
                 edges_arr, n_nodes, gene_names, pph_instance
             )
+            n_features_this_step = len(cycles)
 
             if not cycles:
                 feature_rows.append({
                     "step":             t,
                     "filtration_value": fval,
-                    "betti":            int(curr_betti),
+                    "betti":            curr_betti,
                     "change":           change,
                     "n_features":       0,
                     "feature_id":       None,
@@ -656,9 +661,9 @@ def trace_persistent_features(
                     feature_rows.append({
                         "step":             t,
                         "filtration_value": fval,
-                        "betti":            int(curr_betti),
+                        "betti":            curr_betti,
                         "change":           change,
-                        "n_features":       len(cycles),
+                        "n_features":       n_features_this_step,
                         "feature_id":       feat_id,
                         "feature_type":     "ph_cycle",
                         "gene_members":     cycle["gene_members"],
@@ -669,14 +674,13 @@ def trace_persistent_features(
                         "coefficients":     cycle["coefficients"],
                     })
 
+        # ── Summary Row ─────────────────────────────────────────────────
         summary_rows.append({
             "step":               t,
             "filtration_value":   fval,
-            "betti":              int(curr_betti),
+            "betti":              curr_betti,
             "change":             change,
-            "n_features":         (int(curr_betti)
-                                   if target_dimension == 0
-                                   else len(cycles) if cycles else 0),
+            "n_features":         n_features_this_step,
             "all_genes_involved": sorted(set(all_genes_this_step)),
             "n_unique_genes":     len(set(all_genes_this_step)),
         })
