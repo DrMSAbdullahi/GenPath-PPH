@@ -674,7 +674,7 @@ def trace_persistent_features(
             "filtration_value":   fval,
             "betti":              int(curr_betti),
             "change":             change,
-            "n_features":         (len(comp_list)
+            "n_features":         (int(curr_betti)
                                    if target_dimension == 0
                                    else len(cycles) if cycles else 0),
             "all_genes_involved": sorted(set(all_genes_this_step)),
